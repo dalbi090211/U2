@@ -10,18 +10,12 @@
 |---|---|---|
 | [Environment/ArenaCoreActor.cpp](../Environment/ArenaCoreActor.cpp) | `Source/TeamProject_Fin/Environment/ArenaCoreActor.cpp` | 본인 추가 이력 |
 | [Environment/ArenaCoreActor.h](../Environment/ArenaCoreActor.h) | `Source/TeamProject_Fin/Environment/ArenaCoreActor.h` | 본인 추가 이력 |
-| [AI/BaseAIController.cpp](../AI/BaseAIController.cpp) | `Source/TeamProject_Fin/GameCore/AI/BaseAIController.cpp` | 본인 수정 이력 |
-| [AI/BaseAIController.h](../AI/BaseAIController.h) | `Source/TeamProject_Fin/GameCore/AI/BaseAIController.h` | 본인 수정 이력 |
-| [AI/MonsterAIController.cpp](../AI/MonsterAIController.cpp) | `Source/TeamProject_Fin/GameCore/AI/MonsterAIController.cpp` | 본인 수정 이력 |
-| [AI/MonsterAIController.h](../AI/MonsterAIController.h) | `Source/TeamProject_Fin/GameCore/AI/MonsterAIController.h` | 본인 수정 이력 |
 | [Ability/BomberMine.cpp](../Ability/BomberMine.cpp) | `Source/TeamProject_Fin/GameCore/Ability/BomberMine.cpp` | 본인 추가 이력 |
 | [Ability/BomberMine.h](../Ability/BomberMine.h) | `Source/TeamProject_Fin/GameCore/Ability/BomberMine.h` | 본인 추가 이력 |
 | [Ability/GA_BomberSkill_Mine.cpp](../Ability/GA_BomberSkill_Mine.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_Mine.cpp` | 본인 추가 이력 |
 | [Ability/GA_BomberSkill_Mine.h](../Ability/GA_BomberSkill_Mine.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_Mine.h` | 본인 추가 이력 |
 | [Ability/GA_BomberSkill_MineDetonate.cpp](../Ability/GA_BomberSkill_MineDetonate.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_MineDetonate.cpp` | 본인 추가 이력 |
 | [Ability/GA_BomberSkill_MineDetonate.h](../Ability/GA_BomberSkill_MineDetonate.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_MineDetonate.h` | 본인 추가 이력 |
-| [Ability/GA_Fire.cpp](../Ability/GA_Fire.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_Fire.cpp` | 본인 수정 이력 |
-| [Ability/GA_Fire.h](../Ability/GA_Fire.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_Fire.h` | 기존 수록 또는 대응 파일 |
 | [Ability/GA_Interact.cpp](../Ability/GA_Interact.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_Interact.cpp` | 본인 수정 이력 |
 | [Ability/GA_Interact.h](../Ability/GA_Interact.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_Interact.h` | 본인 추가 이력 |
 | [Ability/GA_SniperSkill_Camo.cpp](../Ability/GA_SniperSkill_Camo.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_SniperSkill_Camo.cpp` | 본인 추가 이력 |
@@ -30,10 +24,6 @@
 | [Ability/GameplayCues/GCN_PortalFade.h](../Ability/GameplayCues/GCN_PortalFade.h) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_PortalFade.h` | 본인 추가 이력 |
 | [Ability/GameplayCues/GCN_StealthMaterial.cpp](../Ability/GameplayCues/GCN_StealthMaterial.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_StealthMaterial.cpp` | 본인 추가 이력 |
 | [Ability/GameplayCues/GCN_StealthMaterial.h](../Ability/GameplayCues/GCN_StealthMaterial.h) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_StealthMaterial.h` | 본인 추가 이력 |
-| [Animation/AnimNotifyState_ApplyGameplayEffect.cpp](../Animation/AnimNotifyState_ApplyGameplayEffect.cpp) | `Source/TeamProject_Fin/GameCore/Animation/AnimNotifyState_ApplyGameplayEffect.cpp` | 본인 수정 이력 |
-| [Animation/AnimNotifyState_ApplyGameplayEffect.h](../Animation/AnimNotifyState_ApplyGameplayEffect.h) | `Source/TeamProject_Fin/GameCore/Animation/AnimNotifyState_ApplyGameplayEffect.h` | 기존 수록 또는 대응 파일 |
-| [Animation/PlayerAnimInstance.cpp](../Animation/PlayerAnimInstance.cpp) | `Source/TeamProject_Fin/GameCore/Animation/PlayerAnimInstance.cpp` | 본인 수정 이력 |
-| [Animation/PlayerAnimInstance.h](../Animation/PlayerAnimInstance.h) | `Source/TeamProject_Fin/GameCore/Animation/PlayerAnimInstance.h` | 기존 수록 또는 대응 파일 |
 | [Attribute/CharacterInitData.h](../Attribute/CharacterInitData.h) | `Source/TeamProject_Fin/GameCore/Attribute/CharacterInitData.h` | 본인 추가 이력 |
 | [Attribute/GE_InitAttributes.cpp](../Attribute/GE_InitAttributes.cpp) | `Source/TeamProject_Fin/GameCore/Attribute/GE_InitAttributes.cpp` | 본인 추가 이력 |
 | [Attribute/GE_InitAttributes.h](../Attribute/GE_InitAttributes.h) | `Source/TeamProject_Fin/GameCore/Attribute/GE_InitAttributes.h` | 본인 추가 이력 |
@@ -51,12 +41,6 @@
 | [BasePlayerController.h](../BasePlayerController.h) | `Source/TeamProject_Fin/GameCore/BasePlayerController.h` | 본인 추가 이력 |
 | [BasePlayerState.cpp](../BasePlayerState.cpp) | `Source/TeamProject_Fin/GameCore/BasePlayerState.cpp` | 본인 추가 이력 |
 | [BasePlayerState.h](../BasePlayerState.h) | `Source/TeamProject_Fin/GameCore/BasePlayerState.h` | 본인 추가 이력 |
-| [Character/BaseCharacter.cpp](../Character/BaseCharacter.cpp) | `Source/TeamProject_Fin/GameCore/Character/BaseCharacter.cpp` | 본인 수정 이력 |
-| [Character/BaseCharacter.h](../Character/BaseCharacter.h) | `Source/TeamProject_Fin/GameCore/Character/BaseCharacter.h` | 본인 수정 이력 |
-| [Character/MonsterCharacter.cpp](../Character/MonsterCharacter.cpp) | `Source/TeamProject_Fin/GameCore/Character/MonsterCharacter.cpp` | 본인 수정 이력 |
-| [Character/MonsterCharacter.h](../Character/MonsterCharacter.h) | `Source/TeamProject_Fin/GameCore/Character/MonsterCharacter.h` | 본인 수정 이력 |
-| [Character/PlayerCharacter.cpp](../Character/PlayerCharacter.cpp) | `Source/TeamProject_Fin/GameCore/Character/PlayerCharacter.cpp` | 본인 수정 이력 |
-| [Character/PlayerCharacter.h](../Character/PlayerCharacter.h) | `Source/TeamProject_Fin/GameCore/Character/PlayerCharacter.h` | 본인 수정 이력 |
 | [HeroType/DLHeroTypes.h](../HeroType/DLHeroTypes.h) | `Source/TeamProject_Fin/GameCore/HeroType/DLHeroTypes.h` | 본인 추가 이력 |
 | [Interact/InteractComponent.cpp](../Interact/InteractComponent.cpp) | `Source/TeamProject_Fin/GameCore/Interact/InteractComponent.cpp` | 본인 추가 이력 |
 | [Interact/InteractComponent.h](../Interact/InteractComponent.h) | `Source/TeamProject_Fin/GameCore/Interact/InteractComponent.h` | 본인 추가 이력 |
@@ -81,8 +65,6 @@
 | [Match/SessionEntryWidget.h](../Match/SessionEntryWidget.h) | `Source/TeamProject_Fin/GameCore/Match/SessionEntryWidget.h` | 본인 추가 이력 |
 | [PlayGameMode.cpp](../PlayGameMode.cpp) | `Source/TeamProject_Fin/GameCore/PlayGameMode.cpp` | 본인 추가 이력 |
 | [PlayGameMode.h](../PlayGameMode.h) | `Source/TeamProject_Fin/GameCore/PlayGameMode.h` | 본인 추가 이력 |
-| [Tags/GameplayTagSystem.cpp](../Tags/GameplayTagSystem.cpp) | `Source/TeamProject_Fin/GameCore/Tags/GameplayTagSystem.cpp` | 본인 수정 이력 |
-| [Tags/GameplayTagSystem.h](../Tags/GameplayTagSystem.h) | `Source/TeamProject_Fin/GameCore/Tags/GameplayTagSystem.h` | 본인 수정 이력 |
 | [UI/BaseWidgetLayer.cpp](../UI/BaseWidgetLayer.cpp) | `Source/TeamProject_Fin/GameCore/UI/BaseWidgetLayer.cpp` | 본인 추가 이력 |
 | [UI/BaseWidgetLayer.h](../UI/BaseWidgetLayer.h) | `Source/TeamProject_Fin/GameCore/UI/BaseWidgetLayer.h` | 본인 추가 이력 |
 | [UI/DLPlayerLoadOut.h](../UI/DLPlayerLoadOut.h) | `Source/TeamProject_Fin/GameCore/UI/DLPlayerLoadOut.h` | 본인 추가 이력 |
@@ -92,14 +74,6 @@
 | [UI/LayerWidgetBase.h](../UI/LayerWidgetBase.h) | `Source/TeamProject_Fin/GameCore/UI/LayerWidgetBase.h` | 본인 추가 이력 |
 | [UI/UIStatic.h](../UI/UIStatic.h) | `Source/TeamProject_Fin/GameCore/UI/UIStatic.h` | 본인 추가 이력 |
 | [UI/UIStruct.h](../UI/UIStruct.h) | `Source/TeamProject_Fin/GameCore/UI/UIStruct.h` | 본인 추가 이력 |
-| [Weapon/Core/WeaponBase.cpp](../Weapon/Core/WeaponBase.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponBase.cpp` | 본인 수정 이력 |
-| [Weapon/Core/WeaponBase.h](../Weapon/Core/WeaponBase.h) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponBase.h` | 본인 수정 이력 |
-| [Weapon/Core/WeaponComponent.cpp](../Weapon/Core/WeaponComponent.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponComponent.cpp` | 본인 수정 이력 |
-| [Weapon/Core/WeaponComponent.h](../Weapon/Core/WeaponComponent.h) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponComponent.h` | 본인 수정 이력 |
-| [Weapon/Libraries/WeaponCueLibrary.cpp](../Weapon/Libraries/WeaponCueLibrary.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Libraries/WeaponCueLibrary.cpp` | 본인 수정 이력 |
-| [Weapon/Libraries/WeaponCueLibrary.h](../Weapon/Libraries/WeaponCueLibrary.h) | `Source/TeamProject_Fin/GameCore/Weapon/Libraries/WeaponCueLibrary.h` | 본인 수정 이력 |
-| [Weapon/Projectiles/WeaponProjectile.cpp](../Weapon/Projectiles/WeaponProjectile.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Projectiles/WeaponProjectile.cpp` | 본인 수정 이력 |
-| [Weapon/Projectiles/WeaponProjectile.h](../Weapon/Projectiles/WeaponProjectile.h) | `Source/TeamProject_Fin/GameCore/Weapon/Projectiles/WeaponProjectile.h` | 본인 수정 이력 |
 | [PCGMap/MapBuild/MapStatic.h](../PCGMap/MapBuild/MapStatic.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/MapStatic.h` | 본인 추가 이력 |
 | [PCGMap/MapBuild/MapStruct.h](../PCGMap/MapBuild/MapStruct.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/MapStruct.h` | 본인 추가 이력 |
 | [PCGMap/MapBuild/RouteBuild/RouteEvent.h](../PCGMap/MapBuild/RouteBuild/RouteEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/RouteBuild/RouteEvent.h` | 본인 추가 이력 |

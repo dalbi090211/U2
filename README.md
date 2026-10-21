@@ -17,7 +17,7 @@ Unreal Engine 5.8 기반 3인칭 협동 슈터 **RIFT RUNNERS**에서 김명석(
 | 스나이퍼 스킬 | 장막·은신 상태 분리, 발사 시 해제와 재진입, 강화 효과, 머티리얼·로컬 화면 연출 | [GA_SniperSkill_Camo.cpp](Ability/GA_SniperSkill_Camo.cpp), [GCN_StealthMaterial.cpp](Ability/GameplayCues/GCN_StealthMaterial.cpp) |
 | UI·진행 흐름 | 위젯 레이어와 재사용, 경로 UI·선택 투표, 로비·캐릭터 선택, 세션 참가 및 트래블 연동 | [UI](UI/), [맵 UI](PCGMap/MapBuild/UI/), [Match](Match/) |
 
-캐릭터·무기·AI 연동은 본인 변경분의 맥락을 보존하기 위해 전체 파일로 수록했으며, 파일 전체를 단독 작성했다는 의미는 아닙니다. 파일별 원본 경로와 선정 근거는 [소스 출처 목록](Docs/SourceMap.md)에 기록했습니다.
+파일별 원본 경로와 선정 근거는 [소스 출처 목록](Docs/SourceMap.md)에 기록했습니다.
 
 ## 단독 담당 이슈와 기술문서
 
