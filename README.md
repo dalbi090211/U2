@@ -1,4 +1,4 @@
-# RIFT RUNNERS — 김명석 개발 포트폴리오
+# RIFT RUNNERS
 
 Unreal Engine 5.8 기반 3인칭 협동 슈터 **RIFT RUNNERS**에서 김명석(`dalbi090211`)이 구현·수정한 C++ 코드와 단독 담당 이슈의 기술문서를 모았습니다.
 
