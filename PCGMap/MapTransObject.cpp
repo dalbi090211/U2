@@ -1,8 +1,13 @@
 #include "MapTransObject.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameCore/BasePlayerController.h"
+#include "GameCore/BaseGameState.h"
 #include "GameCore/Interact/InteractTriggerComponent.h"
+#include "GameCore/Tags/GameplayTagSystem.h"
 #include "MapBuild/WorldGenSubSystem.h"
 
 AMapTransObject::AMapTransObject()
@@ -15,11 +20,56 @@ AMapTransObject::AMapTransObject()
 	RootComponent = Mesh;
 	Trigger->SetupAttachment(Mesh);
 
+	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	Audio->SetupAttachment(Mesh);
+	Audio->bAutoActivate = false;
+
 	InteractText = NSLOCTEXT("Interact", "EnterPortal", "포탈 진입");
 
 	// 진입 연출 기본값. 개별 포탈은 BP나 디테일 패널에서 조정한다
 	FadeDuration = 1.f;
 	HoldTime = 1.f;
+}
+
+void AMapTransObject::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 숨은 채 시작한 포탈은 열릴 때 OnRep_Active 가 튼다
+	if (IsInteractActive())
+	{
+		PlayExclusive(AmbientSound);
+	}
+}
+
+void AMapTransObject::OnRep_Active()
+{
+	Super::OnRep_Active();
+	PlayExclusive(AmbientSound);
+}
+
+void AMapTransObject::OnRep_Triggered()
+{
+	Super::OnRep_Triggered();
+	PlayExclusive(InteractSound);
+}
+
+void AMapTransObject::MulticastRouteMapOpened_Implementation()
+{
+	PlayExclusive(RouteMapOpenSound);
+}
+
+void AMapTransObject::PlayExclusive(USoundBase* Sound)
+{
+	if (!Sound)
+	{
+		return;
+	}
+
+	// SetSound 는 재생 중이면 새 소리를 스스로 틀어서, 멈추지 않고 Play 하면 두 번 시작된다
+	Audio->Stop();
+	Audio->SetSound(Sound);
+	Audio->Play();
 }
 
 void AMapTransObject::CompleteInteract()
@@ -30,6 +80,12 @@ void AMapTransObject::CompleteInteract()
 
 void AMapTransObject::OpenRouteMap()
 {
+	ABaseGameState* GS = GetWorld()->GetGameState<ABaseGameState>();
+	check(GS);
+	if (!GS->StartRouteVote())
+	{
+		return;
+	}
 	UWorldGenSubSystem* Sys = GetWorld()->GetGameInstance()->GetSubsystem<UWorldGenSubSystem>();
 	if (!Sys)
 	{
@@ -43,7 +99,17 @@ void AMapTransObject::OpenRouteMap()
 	{
 		if (ABasePlayerController* BPC = Cast<ABasePlayerController>(It->Get()))
 		{
-			BPC->Client_OpenRouteMap(Seed, CurPos, Sys->GetVisited());
+			if (UAbilitySystemComponent* ASC =
+				UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(BPC->GetPawn()))
+			{
+				// GA_Interact 로 받아둔 무적을 루트맵 보는 동안까지 이어받는다. 레벨이 바뀌며 ASC와 함께 사라진다
+				ASC->AddLooseGameplayTag(GameplayTagSystem::State_Invincible);
+			}
+
+			BPC->Client_OpenRouteMap(Seed, Sys->GetSheet(), CurPos, Sys->GetVisited(),
+				GS->GetRouteVote().Round, GS->GetRouteVote().EndServerTime);
 		}
 	}
+
+	MulticastRouteMapOpened();
 }

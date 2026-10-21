@@ -1,4 +1,4 @@
-#include "GameOverEvent.h"
+﻿#include "GameOverEvent.h"
 
 #include "Kismet/GameplayStatics.h"
 #include "GameCore/BaseGameMode.h"
@@ -13,10 +13,18 @@ void UGameOverEvent::Execute(const UObject* WorldContext)
 		return;
 	}
 
+	ABaseGameState* GameState = Cast<ABaseGameState>(UGameplayStatics::GetGameState(WorldContext));
+
+	// 이미 클리어했으면 제한시간 초과 등으로 늦게 온 게임오버는 무시한다
+	if (GameState && GameState->IsGameCleared())
+	{
+		return;
+	}
+
 	GameMode->KillAllSurvivors();
 
 	// EventManager는 머신마다 따로 있다. GameState를 거쳐야 클라에도 창이 뜬다
-	if (ABaseGameState* GameState = Cast<ABaseGameState>(UGameplayStatics::GetGameState(WorldContext)))
+	if (GameState)
 	{
 		GameState->MulticastGameOver();
 	}

@@ -1,0 +1,164 @@
+# 수록 코드의 출처
+
+- 원본 기준 커밋: `265059d8a3305a45c8f6c890590f4074069a3a88`
+- 확인일: 2026-10-21
+- 본인 추가/수정 이력은 현재 HEAD에서 도달 가능한 비병합 커밋 중 author가 dalbi인 기록으로 확인했습니다.
+- 본인 추가 이력이 있는 파일에도 이후 팀원 수정이 포함될 수 있습니다. 원본 전체 파일을 복제했으며 단독 저작권 표시가 아닙니다.
+- 기존 수록 또는 대응 파일은 기존 U2 선택 범위 또는 헤더/구현 쌍의 맥락을 보존하기 위해 포함했습니다.
+
+| U2 파일 | 원본 경로 | 선정 근거 |
+|---|---|---|
+| [Environment/ArenaCoreActor.cpp](../Environment/ArenaCoreActor.cpp) | `Source/TeamProject_Fin/Environment/ArenaCoreActor.cpp` | 본인 추가 이력 |
+| [Environment/ArenaCoreActor.h](../Environment/ArenaCoreActor.h) | `Source/TeamProject_Fin/Environment/ArenaCoreActor.h` | 본인 추가 이력 |
+| [AI/BaseAIController.cpp](../AI/BaseAIController.cpp) | `Source/TeamProject_Fin/GameCore/AI/BaseAIController.cpp` | 본인 수정 이력 |
+| [AI/BaseAIController.h](../AI/BaseAIController.h) | `Source/TeamProject_Fin/GameCore/AI/BaseAIController.h` | 본인 수정 이력 |
+| [AI/MonsterAIController.cpp](../AI/MonsterAIController.cpp) | `Source/TeamProject_Fin/GameCore/AI/MonsterAIController.cpp` | 본인 수정 이력 |
+| [AI/MonsterAIController.h](../AI/MonsterAIController.h) | `Source/TeamProject_Fin/GameCore/AI/MonsterAIController.h` | 본인 수정 이력 |
+| [Ability/BomberMine.cpp](../Ability/BomberMine.cpp) | `Source/TeamProject_Fin/GameCore/Ability/BomberMine.cpp` | 본인 추가 이력 |
+| [Ability/BomberMine.h](../Ability/BomberMine.h) | `Source/TeamProject_Fin/GameCore/Ability/BomberMine.h` | 본인 추가 이력 |
+| [Ability/GA_BomberSkill_Mine.cpp](../Ability/GA_BomberSkill_Mine.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_Mine.cpp` | 본인 추가 이력 |
+| [Ability/GA_BomberSkill_Mine.h](../Ability/GA_BomberSkill_Mine.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_Mine.h` | 본인 추가 이력 |
+| [Ability/GA_BomberSkill_MineDetonate.cpp](../Ability/GA_BomberSkill_MineDetonate.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_MineDetonate.cpp` | 본인 추가 이력 |
+| [Ability/GA_BomberSkill_MineDetonate.h](../Ability/GA_BomberSkill_MineDetonate.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_BomberSkill_MineDetonate.h` | 본인 추가 이력 |
+| [Ability/GA_Fire.cpp](../Ability/GA_Fire.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_Fire.cpp` | 본인 수정 이력 |
+| [Ability/GA_Fire.h](../Ability/GA_Fire.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_Fire.h` | 기존 수록 또는 대응 파일 |
+| [Ability/GA_Interact.cpp](../Ability/GA_Interact.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_Interact.cpp` | 본인 수정 이력 |
+| [Ability/GA_Interact.h](../Ability/GA_Interact.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_Interact.h` | 본인 추가 이력 |
+| [Ability/GA_SniperSkill_Camo.cpp](../Ability/GA_SniperSkill_Camo.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GA_SniperSkill_Camo.cpp` | 본인 추가 이력 |
+| [Ability/GA_SniperSkill_Camo.h](../Ability/GA_SniperSkill_Camo.h) | `Source/TeamProject_Fin/GameCore/Ability/GA_SniperSkill_Camo.h` | 본인 추가 이력 |
+| [Ability/GameplayCues/GCN_PortalFade.cpp](../Ability/GameplayCues/GCN_PortalFade.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_PortalFade.cpp` | 본인 추가 이력 |
+| [Ability/GameplayCues/GCN_PortalFade.h](../Ability/GameplayCues/GCN_PortalFade.h) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_PortalFade.h` | 본인 추가 이력 |
+| [Ability/GameplayCues/GCN_StealthMaterial.cpp](../Ability/GameplayCues/GCN_StealthMaterial.cpp) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_StealthMaterial.cpp` | 본인 추가 이력 |
+| [Ability/GameplayCues/GCN_StealthMaterial.h](../Ability/GameplayCues/GCN_StealthMaterial.h) | `Source/TeamProject_Fin/GameCore/Ability/GameplayCues/GCN_StealthMaterial.h` | 본인 추가 이력 |
+| [Animation/AnimNotifyState_ApplyGameplayEffect.cpp](../Animation/AnimNotifyState_ApplyGameplayEffect.cpp) | `Source/TeamProject_Fin/GameCore/Animation/AnimNotifyState_ApplyGameplayEffect.cpp` | 본인 수정 이력 |
+| [Animation/AnimNotifyState_ApplyGameplayEffect.h](../Animation/AnimNotifyState_ApplyGameplayEffect.h) | `Source/TeamProject_Fin/GameCore/Animation/AnimNotifyState_ApplyGameplayEffect.h` | 기존 수록 또는 대응 파일 |
+| [Animation/PlayerAnimInstance.cpp](../Animation/PlayerAnimInstance.cpp) | `Source/TeamProject_Fin/GameCore/Animation/PlayerAnimInstance.cpp` | 본인 수정 이력 |
+| [Animation/PlayerAnimInstance.h](../Animation/PlayerAnimInstance.h) | `Source/TeamProject_Fin/GameCore/Animation/PlayerAnimInstance.h` | 기존 수록 또는 대응 파일 |
+| [Attribute/CharacterInitData.h](../Attribute/CharacterInitData.h) | `Source/TeamProject_Fin/GameCore/Attribute/CharacterInitData.h` | 본인 추가 이력 |
+| [Attribute/GE_InitAttributes.cpp](../Attribute/GE_InitAttributes.cpp) | `Source/TeamProject_Fin/GameCore/Attribute/GE_InitAttributes.cpp` | 본인 추가 이력 |
+| [Attribute/GE_InitAttributes.h](../Attribute/GE_InitAttributes.h) | `Source/TeamProject_Fin/GameCore/Attribute/GE_InitAttributes.h` | 본인 추가 이력 |
+| [Attribute/MonsterInitData.h](../Attribute/MonsterInitData.h) | `Source/TeamProject_Fin/GameCore/Attribute/MonsterInitData.h` | 본인 추가 이력 |
+| [Audio/MapMusicTable.h](../Audio/MapMusicTable.h) | `Source/TeamProject_Fin/GameCore/Audio/MapMusicTable.h` | 본인 추가 이력 |
+| [Audio/MusicDirectorSubsystem.cpp](../Audio/MusicDirectorSubsystem.cpp) | `Source/TeamProject_Fin/GameCore/Audio/MusicDirectorSubsystem.cpp` | 본인 수정 이력 |
+| [Audio/MusicDirectorSubsystem.h](../Audio/MusicDirectorSubsystem.h) | `Source/TeamProject_Fin/GameCore/Audio/MusicDirectorSubsystem.h` | 본인 수정 이력 |
+| [Audio/ProjectAudioSettings.cpp](../Audio/ProjectAudioSettings.cpp) | `Source/TeamProject_Fin/GameCore/Audio/ProjectAudioSettings.cpp` | 기존 수록 또는 대응 파일 |
+| [Audio/ProjectAudioSettings.h](../Audio/ProjectAudioSettings.h) | `Source/TeamProject_Fin/GameCore/Audio/ProjectAudioSettings.h` | 본인 수정 이력 |
+| [BaseGameMode.cpp](../BaseGameMode.cpp) | `Source/TeamProject_Fin/GameCore/BaseGameMode.cpp` | 본인 추가 이력 |
+| [BaseGameMode.h](../BaseGameMode.h) | `Source/TeamProject_Fin/GameCore/BaseGameMode.h` | 본인 추가 이력 |
+| [BaseGameState.cpp](../BaseGameState.cpp) | `Source/TeamProject_Fin/GameCore/BaseGameState.cpp` | 본인 추가 이력 |
+| [BaseGameState.h](../BaseGameState.h) | `Source/TeamProject_Fin/GameCore/BaseGameState.h` | 본인 추가 이력 |
+| [BasePlayerController.cpp](../BasePlayerController.cpp) | `Source/TeamProject_Fin/GameCore/BasePlayerController.cpp` | 본인 추가 이력 |
+| [BasePlayerController.h](../BasePlayerController.h) | `Source/TeamProject_Fin/GameCore/BasePlayerController.h` | 본인 추가 이력 |
+| [BasePlayerState.cpp](../BasePlayerState.cpp) | `Source/TeamProject_Fin/GameCore/BasePlayerState.cpp` | 본인 추가 이력 |
+| [BasePlayerState.h](../BasePlayerState.h) | `Source/TeamProject_Fin/GameCore/BasePlayerState.h` | 본인 추가 이력 |
+| [Character/BaseCharacter.cpp](../Character/BaseCharacter.cpp) | `Source/TeamProject_Fin/GameCore/Character/BaseCharacter.cpp` | 본인 수정 이력 |
+| [Character/BaseCharacter.h](../Character/BaseCharacter.h) | `Source/TeamProject_Fin/GameCore/Character/BaseCharacter.h` | 본인 수정 이력 |
+| [Character/MonsterCharacter.cpp](../Character/MonsterCharacter.cpp) | `Source/TeamProject_Fin/GameCore/Character/MonsterCharacter.cpp` | 본인 수정 이력 |
+| [Character/MonsterCharacter.h](../Character/MonsterCharacter.h) | `Source/TeamProject_Fin/GameCore/Character/MonsterCharacter.h` | 본인 수정 이력 |
+| [Character/PlayerCharacter.cpp](../Character/PlayerCharacter.cpp) | `Source/TeamProject_Fin/GameCore/Character/PlayerCharacter.cpp` | 본인 수정 이력 |
+| [Character/PlayerCharacter.h](../Character/PlayerCharacter.h) | `Source/TeamProject_Fin/GameCore/Character/PlayerCharacter.h` | 본인 수정 이력 |
+| [HeroType/DLHeroTypes.h](../HeroType/DLHeroTypes.h) | `Source/TeamProject_Fin/GameCore/HeroType/DLHeroTypes.h` | 본인 추가 이력 |
+| [Interact/InteractComponent.cpp](../Interact/InteractComponent.cpp) | `Source/TeamProject_Fin/GameCore/Interact/InteractComponent.cpp` | 본인 추가 이력 |
+| [Interact/InteractComponent.h](../Interact/InteractComponent.h) | `Source/TeamProject_Fin/GameCore/Interact/InteractComponent.h` | 본인 추가 이력 |
+| [Interact/InteractTriggerComponent.cpp](../Interact/InteractTriggerComponent.cpp) | `Source/TeamProject_Fin/GameCore/Interact/InteractTriggerComponent.cpp` | 본인 추가 이력 |
+| [Interact/InteractTriggerComponent.h](../Interact/InteractTriggerComponent.h) | `Source/TeamProject_Fin/GameCore/Interact/InteractTriggerComponent.h` | 본인 추가 이력 |
+| [Interface/Interactable.h](../Interface/Interactable.h) | `Source/TeamProject_Fin/GameCore/Interface/Interactable.h` | 본인 추가 이력 |
+| [Interface/Spawnable.h](../Interface/Spawnable.h) | `Source/TeamProject_Fin/GameCore/Interface/Spawnable.h` | 본인 추가 이력 |
+| [Match/HeroPreviewActor.cpp](../Match/HeroPreviewActor.cpp) | `Source/TeamProject_Fin/GameCore/Match/HeroPreviewActor.cpp` | 본인 추가 이력 |
+| [Match/HeroPreviewActor.h](../Match/HeroPreviewActor.h) | `Source/TeamProject_Fin/GameCore/Match/HeroPreviewActor.h` | 본인 추가 이력 |
+| [Match/LobbyPlayerController.cpp](../Match/LobbyPlayerController.cpp) | `Source/TeamProject_Fin/GameCore/Match/LobbyPlayerController.cpp` | 본인 추가 이력 |
+| [Match/LobbyPlayerController.h](../Match/LobbyPlayerController.h) | `Source/TeamProject_Fin/GameCore/Match/LobbyPlayerController.h` | 본인 추가 이력 |
+| [Match/LobbyWaitRoomWidget.cpp](../Match/LobbyWaitRoomWidget.cpp) | `Source/TeamProject_Fin/GameCore/Match/LobbyWaitRoomWidget.cpp` | 본인 추가 이력 |
+| [Match/LobbyWaitRoomWidget.h](../Match/LobbyWaitRoomWidget.h) | `Source/TeamProject_Fin/GameCore/Match/LobbyWaitRoomWidget.h` | 본인 추가 이력 |
+| [Match/MatchAlertSubsystem.cpp](../Match/MatchAlertSubsystem.cpp) | `Source/TeamProject_Fin/GameCore/Match/MatchAlertSubsystem.cpp` | 본인 추가 이력 |
+| [Match/MatchAlertSubsystem.h](../Match/MatchAlertSubsystem.h) | `Source/TeamProject_Fin/GameCore/Match/MatchAlertSubsystem.h` | 본인 추가 이력 |
+| [Match/RoomPlayerEntryWidget.cpp](../Match/RoomPlayerEntryWidget.cpp) | `Source/TeamProject_Fin/GameCore/Match/RoomPlayerEntryWidget.cpp` | 본인 추가 이력 |
+| [Match/RoomPlayerEntryWidget.h](../Match/RoomPlayerEntryWidget.h) | `Source/TeamProject_Fin/GameCore/Match/RoomPlayerEntryWidget.h` | 본인 추가 이력 |
+| [Match/RouteVoteState.cpp](../Match/RouteVoteState.cpp) | `Source/TeamProject_Fin/GameCore/Match/RouteVoteState.cpp` | 본인 추가 이력 |
+| [Match/RouteVoteState.h](../Match/RouteVoteState.h) | `Source/TeamProject_Fin/GameCore/Match/RouteVoteState.h` | 본인 추가 이력 |
+| [Match/SessionEntryData.h](../Match/SessionEntryData.h) | `Source/TeamProject_Fin/GameCore/Match/SessionEntryData.h` | 본인 추가 이력 |
+| [Match/SessionEntryWidget.cpp](../Match/SessionEntryWidget.cpp) | `Source/TeamProject_Fin/GameCore/Match/SessionEntryWidget.cpp` | 본인 추가 이력 |
+| [Match/SessionEntryWidget.h](../Match/SessionEntryWidget.h) | `Source/TeamProject_Fin/GameCore/Match/SessionEntryWidget.h` | 본인 추가 이력 |
+| [PlayGameMode.cpp](../PlayGameMode.cpp) | `Source/TeamProject_Fin/GameCore/PlayGameMode.cpp` | 본인 추가 이력 |
+| [PlayGameMode.h](../PlayGameMode.h) | `Source/TeamProject_Fin/GameCore/PlayGameMode.h` | 본인 추가 이력 |
+| [Tags/GameplayTagSystem.cpp](../Tags/GameplayTagSystem.cpp) | `Source/TeamProject_Fin/GameCore/Tags/GameplayTagSystem.cpp` | 본인 수정 이력 |
+| [Tags/GameplayTagSystem.h](../Tags/GameplayTagSystem.h) | `Source/TeamProject_Fin/GameCore/Tags/GameplayTagSystem.h` | 본인 수정 이력 |
+| [UI/BaseWidgetLayer.cpp](../UI/BaseWidgetLayer.cpp) | `Source/TeamProject_Fin/GameCore/UI/BaseWidgetLayer.cpp` | 본인 추가 이력 |
+| [UI/BaseWidgetLayer.h](../UI/BaseWidgetLayer.h) | `Source/TeamProject_Fin/GameCore/UI/BaseWidgetLayer.h` | 본인 추가 이력 |
+| [UI/DLPlayerLoadOut.h](../UI/DLPlayerLoadOut.h) | `Source/TeamProject_Fin/GameCore/UI/DLPlayerLoadOut.h` | 본인 추가 이력 |
+| [UI/DefaultWidgetLayer.cpp](../UI/DefaultWidgetLayer.cpp) | `Source/TeamProject_Fin/GameCore/UI/DefaultWidgetLayer.cpp` | 본인 추가 이력 |
+| [UI/DefaultWidgetLayer.h](../UI/DefaultWidgetLayer.h) | `Source/TeamProject_Fin/GameCore/UI/DefaultWidgetLayer.h` | 본인 추가 이력 |
+| [UI/LayerWidgetBase.cpp](../UI/LayerWidgetBase.cpp) | `Source/TeamProject_Fin/GameCore/UI/LayerWidgetBase.cpp` | 본인 추가 이력 |
+| [UI/LayerWidgetBase.h](../UI/LayerWidgetBase.h) | `Source/TeamProject_Fin/GameCore/UI/LayerWidgetBase.h` | 본인 추가 이력 |
+| [UI/UIStatic.h](../UI/UIStatic.h) | `Source/TeamProject_Fin/GameCore/UI/UIStatic.h` | 본인 추가 이력 |
+| [UI/UIStruct.h](../UI/UIStruct.h) | `Source/TeamProject_Fin/GameCore/UI/UIStruct.h` | 본인 추가 이력 |
+| [Weapon/Core/WeaponBase.cpp](../Weapon/Core/WeaponBase.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponBase.cpp` | 본인 수정 이력 |
+| [Weapon/Core/WeaponBase.h](../Weapon/Core/WeaponBase.h) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponBase.h` | 본인 수정 이력 |
+| [Weapon/Core/WeaponComponent.cpp](../Weapon/Core/WeaponComponent.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponComponent.cpp` | 본인 수정 이력 |
+| [Weapon/Core/WeaponComponent.h](../Weapon/Core/WeaponComponent.h) | `Source/TeamProject_Fin/GameCore/Weapon/Core/WeaponComponent.h` | 본인 수정 이력 |
+| [Weapon/Libraries/WeaponCueLibrary.cpp](../Weapon/Libraries/WeaponCueLibrary.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Libraries/WeaponCueLibrary.cpp` | 본인 수정 이력 |
+| [Weapon/Libraries/WeaponCueLibrary.h](../Weapon/Libraries/WeaponCueLibrary.h) | `Source/TeamProject_Fin/GameCore/Weapon/Libraries/WeaponCueLibrary.h` | 본인 수정 이력 |
+| [Weapon/Projectiles/WeaponProjectile.cpp](../Weapon/Projectiles/WeaponProjectile.cpp) | `Source/TeamProject_Fin/GameCore/Weapon/Projectiles/WeaponProjectile.cpp` | 본인 수정 이력 |
+| [Weapon/Projectiles/WeaponProjectile.h](../Weapon/Projectiles/WeaponProjectile.h) | `Source/TeamProject_Fin/GameCore/Weapon/Projectiles/WeaponProjectile.h` | 본인 수정 이력 |
+| [PCGMap/MapBuild/MapStatic.h](../PCGMap/MapBuild/MapStatic.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/MapStatic.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/MapStruct.h](../PCGMap/MapBuild/MapStruct.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/MapStruct.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/RouteBuild/RouteEvent.h](../PCGMap/MapBuild/RouteBuild/RouteEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/RouteBuild/RouteEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/RouteBuild/RouteGenSystem.cpp](../PCGMap/MapBuild/RouteBuild/RouteGenSystem.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/RouteBuild/RouteGenSystem.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/RouteBuild/RouteGenSystem.h](../PCGMap/MapBuild/RouteBuild/RouteGenSystem.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/RouteBuild/RouteGenSystem.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/GameOverEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/GameOverEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/GameOverEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/GameOverEvent.h](../PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/GameOverEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/GameOverEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ScreenTextEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ScreenTextEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ScreenTextEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ScreenTextEvent.h](../PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ScreenTextEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ScreenTextEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ShowClearEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ShowClearEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ShowClearEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ShowClearEvent.h](../PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ShowClearEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/ConceptEvent/ShowClearEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/EventManager.cpp](../PCGMap/MapBuild/SectorBuild/Event/EventManager.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/EventManager.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/EventManager.h](../PCGMap/MapBuild/SectorBuild/Event/EventManager.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/EventManager.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/BattlePreEventCompletion.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/BattlePreEventCompletion.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/BattlePreEventCompletion.h` | 기존 수록 또는 대응 파일 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/ConstBattleSector.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/ConstBattleSector.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/ConstBattleSector.cpp` | 본인 수정 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/ConstBattleSector.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/ConstBattleSector.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/ConstBattleSector.h` | 본인 수정 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/OverlapBattleSector.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/OverlapBattleSector.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/OverlapBattleSector.cpp` | 본인 수정 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/OverlapBattleSector.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/OverlapBattleSector.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/BattleSector/OverlapBattleSector.h` | 본인 수정 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/ChaosCacheTriggerEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/ChaosCacheTriggerEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/ChaosCacheTriggerEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/ChaosCacheTriggerEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/ChaosCacheTriggerEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/ChaosCacheTriggerEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/DoorEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/DoorEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/DoorEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/DoorEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/DoorEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/DoorEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/LevelTriggerEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/LevelTriggerEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/LevelTriggerEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/LevelTriggerEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/LevelTriggerEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/LevelTriggerEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlacedInteractActor.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlacedInteractActor.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlacedInteractActor.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlacedInteractActor.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlacedInteractActor.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlacedInteractActor.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlayCinematicEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlayCinematicEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlayCinematicEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlayCinematicEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlayCinematicEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/PlayCinematicEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/RewardEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/RewardEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/RewardEvent.h` | 본인 수정 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/TransPlayerPosEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/TransPlayerPosEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/TransPlayerPosEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/TransPlayerPosEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/TransPlayerPosEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/TransPlayerPosEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/WaitAllEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/WaitAllEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/WaitAllEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/WaitAllEvent.h](../PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/WaitAllEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/PlacedEvent/WaitAllEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/SectorEvent.cpp](../PCGMap/MapBuild/SectorBuild/Event/SectorEvent.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/SectorEvent.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Event/SectorEvent.h](../PCGMap/MapBuild/SectorBuild/Event/SectorEvent.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Event/SectorEvent.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/SectorStatic.h](../PCGMap/MapBuild/SectorBuild/Sector/SectorStatic.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/SectorStatic.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/Door.cpp](../PCGMap/MapBuild/SectorBuild/Sector/Struct/Door.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/Door.cpp` | 본인 수정 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/Door.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/Door.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/Door.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/DoorShapeType.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/DoorShapeType.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/DoorShapeType.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/EvaluateComps.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/EvaluateComps.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/EvaluateComps.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/Sector.cpp](../PCGMap/MapBuild/SectorBuild/Sector/Struct/Sector.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/Sector.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/Sector.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/Sector.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/Sector.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceList.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceList.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceList.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceSet.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceSet.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceSet.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceType.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceType.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorPieceType.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorRule.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorRule.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/SectorRule.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/Sector/Struct/StartSector.h](../PCGMap/MapBuild/SectorBuild/Sector/Struct/StartSector.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/Sector/Struct/StartSector.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/SectorSubsystem.cpp](../PCGMap/MapBuild/SectorBuild/SectorSubsystem.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/SectorSubsystem.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorBuild/SectorSubsystem.h](../PCGMap/MapBuild/SectorBuild/SectorSubsystem.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorBuild/SectorSubsystem.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/SectorLevelSet.h](../PCGMap/MapBuild/SectorLevelSet.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/SectorLevelSet.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/UI/RouteNode.cpp](../PCGMap/MapBuild/UI/RouteNode.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/UI/RouteNode.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/UI/RouteNode.h](../PCGMap/MapBuild/UI/RouteNode.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/UI/RouteNode.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/UI/RouteWidget.cpp](../PCGMap/MapBuild/UI/RouteWidget.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/UI/RouteWidget.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/UI/RouteWidget.h](../PCGMap/MapBuild/UI/RouteWidget.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/UI/RouteWidget.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/WorldGenSettings.h](../PCGMap/MapBuild/WorldGenSettings.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/WorldGenSettings.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/WorldGenSheet.cpp](../PCGMap/MapBuild/WorldGenSheet.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/WorldGenSheet.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/WorldGenSheet.h](../PCGMap/MapBuild/WorldGenSheet.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/WorldGenSheet.h` | 본인 추가 이력 |
+| [PCGMap/MapBuild/WorldGenSubSystem.cpp](../PCGMap/MapBuild/WorldGenSubSystem.cpp) | `Source/TeamProject_Fin/PCGMap/MapBuild/WorldGenSubSystem.cpp` | 본인 추가 이력 |
+| [PCGMap/MapBuild/WorldGenSubSystem.h](../PCGMap/MapBuild/WorldGenSubSystem.h) | `Source/TeamProject_Fin/PCGMap/MapBuild/WorldGenSubSystem.h` | 본인 추가 이력 |
+| [PCGMap/MapTransObject.cpp](../PCGMap/MapTransObject.cpp) | `Source/TeamProject_Fin/PCGMap/MapTransObject.cpp` | 본인 추가 이력 |
+| [PCGMap/MapTransObject.h](../PCGMap/MapTransObject.h) | `Source/TeamProject_Fin/PCGMap/MapTransObject.h` | 본인 추가 이력 |
+| [Tests/RouteVoteTests.cpp](../Tests/RouteVoteTests.cpp) | `Source/TeamProject_Fin/Tests/RouteVoteTests.cpp` | 본인 추가 이력 |

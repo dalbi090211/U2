@@ -1,6 +1,34 @@
-#include "RouteGenSystem.h"
+﻿#include "RouteGenSystem.h"
 
 #include "TeamProject_Fin/PCGMap/MapBuild/MapStatic.h"
+
+namespace
+{
+	// 한 칸 안 나올 때마다 기본 가중치의 이 비율만큼 더 얹는다. 0.5 면 네 칸 연속 없을 때 세 배
+	constexpr float SpecialRoomPityGrowth = 0.5f;
+
+	ESectorType RollRoomType(const TArray<float>& Weights)
+	{
+		float Sum = 0.f;
+		for (const float W : Weights)
+		{
+			Sum += W;
+		}
+
+		float Roll = randStream.FRand() * Sum;
+		for (int32 i = 0; i < Weights.Num(); i++)
+		{
+			Roll -= Weights[i];
+			if (Weights[i] > 0.f && Roll <= 0.f)
+			{
+				return static_cast<ESectorType>(i);
+			}
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("[Route] 굴릴 가중치가 없다 — 몬스터로 할당 (합 %.2f)"), Sum);
+		return ESectorType::Monster;
+	}
+}
 
 void RouteGenSystem::Initialize(const TArray<FSectorWeight>& Weights)
 {
@@ -10,9 +38,10 @@ void RouteGenSystem::Initialize(const TArray<FSectorWeight>& Weights)
 	PreRouteRules = {
 		MakeShared<MakeRouteStartCommand>(),
 		MakeShared<BeforeBossRestCommand>(),
-		MakeShared<MakeRouteStoreCommand>(),
+		// MakeShared<MakeRouteStoreCommand>(),
 		MakeShared<MakeBossRoomCommand>(),
 		MakeShared<MakeStartRoomCommand>(),
+		MakeShared<LevelEnvSetup>(),
 	};
 	
 	PostRouteRules.Reset();
@@ -110,29 +139,39 @@ void RouteGenSystem::makeOneRoute(int startX, FVirRoute*& OutVirtualRoute)
 
 //추후 확률 보정 추가
 void RouteGenSystem::makeRoom(FVirRoute*& OutVirtualRoute) {
-	float WeightSum = 0.f;
-	
-	for (const FSectorWeight& Weight : DefaultWeights) {
-		WeightSum += Weight.Weight;
-	}
-	
+	// 안 나온 횟수를 들고 있어서 루트마다 새로 만든다. 앞 루트의 누적이 넘어오면 안 된다
+	TArray<TUniquePtr<IRoomRule>> RoomRules;
+	RoomRules.Add(MakeUnique<FSpecialRoomPityRule>(ESectorType::Store, SpecialRoomPityGrowth));
+	RoomRules.Add(MakeUnique<FSpecialRoomPityRule>(ESectorType::Event, SpecialRoomPityGrowth));
+	RoomRules.Add(MakeUnique<FSpecialRoomPityRule>(ESectorType::Elite, SpecialRoomPityGrowth));
+
+	const int32 TypeCount = StaticEnum<ESectorType>()->NumEnums() - 1;
+
 	for (int i = 0; i < OutVirtualRoute->MaxY; i++) {
 		for (int j = 0; j < OutVirtualRoute->MaxX; j++) {
-			if (OutVirtualRoute->Levels[i].Sectors[j].Type == ESectorType::Allot) {
-				float selectWeight = randStream.RandRange(0.f, WeightSum);
-				
+			FVirSector& Sector = OutVirtualRoute->Levels[i].Sectors[j];
+			if (Sector.Type == ESectorType::None) {
+				continue;
+			}
+
+			if (Sector.Type == ESectorType::Allot) {
+				// 칸마다 새로 뜬다. 룰이 고친 값이 다음 칸으로 넘어가지 않는다
+				TArray<float> Weights;
+				Weights.Init(0.f, TypeCount);
 				for (const FSectorWeight& Weight : DefaultWeights) {
-					selectWeight -= Weight.Weight;
-					if (selectWeight <= KINDA_SMALL_NUMBER) {
-						OutVirtualRoute->Levels[i].Sectors[j].Type = Weight.Type;
-						break;
-					}
+					Weights[(int32)Weight.Type] += Weight.Weight;
 				}
-				
-				if (OutVirtualRoute->Levels[i].Sectors[j].Type == ESectorType::Allot) {
-					UE_LOG(LogTemp, Warning, TEXT("앱실론보다 큰 오차가 발생, 일단 몬스터로 할당"));
-					OutVirtualRoute->Levels[i].Sectors[j].Type = ESectorType::Monster;
+
+				for (const TUniquePtr<IRoomRule>& Rule : RoomRules) {
+					Rule->Execute(Weights);
 				}
+
+				Sector.Type = RollRoomType(Weights);
+			}
+
+			// 룰이 미리 박은 방도 나온 것으로 친다. 안 그러면 상점 확정 층 뒤에도 상점 가중치가 계속 오른다
+			for (const TUniquePtr<IRoomRule>& Rule : RoomRules) {
+				Rule->Result(Sector.Type);
 			}
 		}
 	}

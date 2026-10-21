@@ -1,55 +1,44 @@
 #include "DoorEvent.h"
 
 #include "Components/StaticMeshComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "NiagaraFunctionLibrary.h"
-#include "NiagaraSystem.h"
-#include "Sound/SoundBase.h"
+#include "Net/UnrealNetwork.h"
 
 ADoorEvent::ADoorEvent()
 {
-	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = false;
-
 	FrameMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FrameMesh"));
 	RootComponent = FrameMesh;
 
 	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
 	DoorMesh->SetupAttachment(FrameMesh);
 
-	//서버에서 Execute돼도 클라이언트가 문이 열리는 것을 보도록 한다
+	//문짝은 각 머신의 OnOpen 이 직접 움직인다. 컴포넌트 복제를 켜면 서버 위치와 로컬 연출이 서로 덮어써 떨린다
 	bReplicates = true;
-	DoorMesh->SetIsReplicated(true);
 }
 
 void ADoorEvent::Execute(const UObject* WorldContext)
 {
 	Super::Execute(WorldContext);	//PreEvents 발화
 
-	if (OpenSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, OpenSound, GetActorLocation());
-	}
-	if (OpenEffect)
-	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-			this, OpenEffect, GetActorLocation(), GetActorRotation());
-	}
-
-	SetActorTickEnabled(true);
+	bOpened = true;
+	OnOpen();	//RepNotify 는 서버 자신에게는 오지 않는다
 }
 
-void ADoorEvent::Tick(float DeltaSeconds)
+void ADoorEvent::FinishOpen()
 {
-	Super::Tick(DeltaSeconds);
-
-	const float Step = FMath::Min(RaiseSpeed * DeltaSeconds, RaiseHeight - RaisedAmount);
-	DoorMesh->AddLocalOffset(FVector(0.f, 0.f, Step));
-	RaisedAmount += Step;
-
-	if (RaisedAmount >= RaiseHeight)
+	if (!HasAuthority())
 	{
-		SetActorTickEnabled(false);
-		RunEventGroups(PostEvents);
+		return;
 	}
+	RunEventGroups(PostEvents);
+}
+
+void ADoorEvent::OnRep_Opened()
+{
+	OnOpen();
+}
+
+void ADoorEvent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ADoorEvent, bOpened);
 }

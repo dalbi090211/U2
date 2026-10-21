@@ -10,6 +10,7 @@ enum class ELayerName : uint8
 	Option,
 	QuitConfirm,
 	Loading,
+	BackWidget,
 	
 	//Lobby
 	LobbyMain,

@@ -6,6 +6,9 @@
 #include "Online/OnlineSessionNames.h"
 #include "GameCore/BaseGameState.h"
 #include "GameCore/BasePlayerState.h"
+#include "GameCore/Match/RunStatisticsSubsystem.h"
+#include "GameCore/Match/PartyRoomSubsystem.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameCore/Match/RoomPlayerEntryWidget.h"
 #include "GameCore/Match/SessionEntryData.h"
 #include "PCGMap/MapBuild/MapStatic.h"
@@ -22,10 +25,20 @@ void ALobbyPlayerController::BeginPlay()
 
 	if (IsLocalController())
 	{
+		UPartyRoomSubsystem* Room = GetGameInstance()->GetSubsystem<UPartyRoomSubsystem>();
+		const bool bReturnedToRoom = Room->IsReturning();
 		// 권한이 없으면 방에 참가해 들어온 것이다
-		if (!HasAuthority())
+		if (!HasAuthority() || bReturnedToRoom)
 		{
 			ShowWidget(ELayerName::MatchRoom);
+		}
+		if (bReturnedToRoom)
+		{
+			Room->FinishReturn();
+			if (HasAuthority())
+			{
+				RestoreRoomSession();
+			}
 		}
 
 		// 대기실을 띄운 뒤에 바인딩한다
@@ -85,13 +98,70 @@ void ALobbyPlayerController::CreateGame(const FString& RoomName)
 		return;
 	}
 
-	// 이전 방이 남아 있으면 먼저 정리
+	PendingRoomName = RoomName;
+
+	// 남의 방에 들어갔다 나오면 네임드 세션이 남아 있다. 파괴가 끝나기 전에 만들면 실패한다
 	if (Sessions->GetNamedSession(NAME_GameSession))
 	{
-		Sessions->DestroySession(NAME_GameSession);
+		DestroyThen(EPendingSessionAction::Create);
+		return;
 	}
 
-	PendingRoomName = RoomName;
+	StartCreateSession();
+}
+
+// 파괴 완료를 기다렸다가 이어서 할 일을 예약한다. 파괴는 비동기다
+void ALobbyPlayerController::DestroyThen(EPendingSessionAction Action)
+{
+	IOnlineSessionPtr Sessions = GetSessionInterface();
+	if (!Sessions.IsValid())
+	{
+		return;
+	}
+
+	PendingAction = Action;
+
+	DestroyHandle = Sessions->AddOnDestroySessionCompleteDelegate_Handle(
+		FOnDestroySessionCompleteDelegate::CreateUObject(this, &ALobbyPlayerController::OnDestroyComplete));
+
+	Sessions->DestroySession(NAME_GameSession);
+}
+
+void ALobbyPlayerController::OnDestroyComplete(FName SessionName, bool bSuccess)
+{
+	ClearDelegates();
+
+	if (!bSuccess)
+	{
+		// 실패해도 이어서 진행한다. 만들기가 또 실패하면 OnCreateComplete가 알린다
+		UE_LOG(LogTemp, Warning, TEXT("[Match] 이전 세션 정리 실패. 그대로 진행한다."));
+	}
+
+	const EPendingSessionAction Action = PendingAction;
+	PendingAction = EPendingSessionAction::None;
+
+	switch (Action)
+	{
+	case EPendingSessionAction::Create:
+		StartCreateSession();
+		break;
+
+	case EPendingSessionAction::ReturnToLobby:
+		ClientTravel(LobbyMapName, TRAVEL_Absolute);
+		break;
+
+	default:
+		break;
+	}
+}
+
+void ALobbyPlayerController::StartCreateSession()
+{
+	IOnlineSessionPtr Sessions = GetSessionInterface();
+	if (!Sessions.IsValid())
+	{
+		return;
+	}
 
 	FOnlineSessionSettings Settings;
 	Settings.bIsLANMatch = false;
@@ -100,7 +170,7 @@ void ALobbyPlayerController::CreateGame(const FString& RoomName)
 	Settings.bAllowJoinInProgress = true; // 시작할 때 StartGame에서 내린다
 	Settings.bUsesPresence = true;
 	Settings.bUseLobbiesIfAvailable = true; // Steam 로비로 광고된다
-	Settings.Set(SEARCH_KEYWORDS, RoomName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	Settings.Set(SEARCH_KEYWORDS, PendingRoomName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	Settings.Set(GameKeyName, GameKey, EOnlineDataAdvertisementType::ViaOnlineService);
 
 	CreateHandle = Sessions->AddOnCreateSessionCompleteDelegate_Handle(
@@ -268,9 +338,25 @@ void ALobbyPlayerController::Server_SelectHero_Implementation(EDLHero NewHero)
 
 void ALobbyPlayerController::StartGame()
 {
-	if (!HasAuthority())
+	if (!HasAuthority() || bRestoringRoomSession || bStartingGame)
 	{
 		return;
+	}
+	bStartingGame = true;
+	GetGameInstance()->GetSubsystem<UPartyRoomSubsystem>()->RememberRoom(
+		FName(*UGameplayStatics::GetCurrentLevelName(this, true)));
+
+	// 새 런에서는 이전 결과를 버린다. 이름/영웅/입장 순서는 그대로 유지한다.
+	GetGameInstance()->GetSubsystem<URunStatisticsSubsystem>()->ResetRun();
+	if (ABaseGameState* GS = GetWorld()->GetGameState<ABaseGameState>())
+	{
+		for (APlayerState* Entry : GS->PlayerArray)
+		{
+			if (ABasePlayerState* BasePS = Cast<ABasePlayerState>(Entry))
+			{
+				BasePS->ResetRunStatistics();
+			}
+		}
 	}
 
 	if (IOnlineSessionPtr Sessions = GetSessionInterface())
@@ -287,17 +373,77 @@ void ALobbyPlayerController::StartGame()
 	}
 
 	// 접속한 전원이 함께 이동한다. 페이드는 SeamlessTravelTo 안에서 처리된다
-	StartLevelTransition(this, FName(*GameplayMapName));
+	if (!StartLevelTransition(this, FName(*GameplayMapName)))
+	{
+		bStartingGame = false;
+	}
+}
+
+void ALobbyPlayerController::RestoreRoomSession()
+{
+	IOnlineSessionPtr Sessions = GetSessionInterface();
+	if (!Sessions.IsValid() || !Sessions->GetNamedSession(NAME_GameSession))
+	{
+		return; // PIE 등 온라인 세션 없이 실행하는 환경도 대기방 이동은 가능하다.
+	}
+	const EOnlineSessionState::Type State = Sessions->GetSessionState(NAME_GameSession);
+	if (State == EOnlineSessionState::InProgress)
+	{
+		bRestoringRoomSession = true;
+		EndRoomSessionHandle = Sessions->AddOnEndSessionCompleteDelegate_Handle(
+			FOnEndSessionCompleteDelegate::CreateUObject(this, &ThisClass::OnEndRoomSessionComplete));
+		if (!Sessions->EndSession(NAME_GameSession))
+		{
+			OnEndRoomSessionComplete(NAME_GameSession, false);
+		}
+		return;
+	}
+	ReopenRoomSession();
+}
+
+void ALobbyPlayerController::OnEndRoomSessionComplete(FName SessionName, bool bSuccess)
+{
+	IOnlineSessionPtr Sessions = GetSessionInterface();
+	if (Sessions.IsValid())
+	{
+		Sessions->ClearOnEndSessionCompleteDelegate_Handle(EndRoomSessionHandle);
+	}
+	EndRoomSessionHandle.Reset();
+	if (!bSuccess)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[PartyReturn] 세션 라운드 종료 실패. 세션 상태를 확인해야 합니다."));
+	}
+	ReopenRoomSession();
+}
+
+void ALobbyPlayerController::ReopenRoomSession()
+{
+	IOnlineSessionPtr Sessions = GetSessionInterface();
+	if (Sessions.IsValid())
+	{
+		if (FOnlineSessionSettings* Settings = Sessions->GetSessionSettings(NAME_GameSession))
+		{
+			FOnlineSessionSettings Updated = *Settings;
+			Updated.bAllowJoinInProgress = true;
+			Updated.bShouldAdvertise = true;
+			if (!Sessions->UpdateSession(NAME_GameSession, Updated, true))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("[PartyReturn] 대기방 세션 설정 업데이트 실패."));
+			}
+		}
+	}
+	bRestoringRoomSession = false;
 }
 
 void ALobbyPlayerController::LeaveRoom()
 {
-	if (IOnlineSessionPtr Sessions = GetSessionInterface())
+	IOnlineSessionPtr Sessions = GetSessionInterface();
+
+	// 파괴가 끝나기 전에 트래블하면 컨트롤러가 사라져 완료를 확인할 주체가 없어진다
+	if (Sessions.IsValid() && Sessions->GetNamedSession(NAME_GameSession))
 	{
-		if (Sessions->GetNamedSession(NAME_GameSession))
-		{
-			Sessions->DestroySession(NAME_GameSession);
-		}
+		DestroyThen(EPendingSessionAction::ReturnToLobby);
+		return;
 	}
 
 	// 호스트든 참가자든 로비 맵으로 돌아간다
@@ -314,8 +460,23 @@ TArray<UObject*> ALobbyPlayerController::GetRoomPlayerEntries()
 		return Entries;
 	}
 
-	Entries.Reserve(GS->PlayerArray.Num());
-	for (const APlayerState* PS : GS->PlayerArray)
+	TArray<ABasePlayerState*> RoomPlayers;
+	for (APlayerState* PS : GS->PlayerArray)
+	{
+		if (ABasePlayerState* BasePS = Cast<ABasePlayerState>(PS); BasePS && !BasePS->IsInactive())
+		{
+			RoomPlayers.Add(BasePS);
+		}
+	}
+	RoomPlayers.StableSort([](const ABasePlayerState& A, const ABasePlayerState& B)
+	{
+		const int32 OrderA = A.GetRoomJoinOrder() == INDEX_NONE ? MAX_int32 : A.GetRoomJoinOrder();
+		const int32 OrderB = B.GetRoomJoinOrder() == INDEX_NONE ? MAX_int32 : B.GetRoomJoinOrder();
+		return OrderA < OrderB;
+	});
+
+	Entries.Reserve(RoomPlayers.Num());
+	for (const APlayerState* PS : RoomPlayers)
 	{
 		const ABasePlayerState* BasePS = Cast<ABasePlayerState>(PS);
 		if (!BasePS)
@@ -349,4 +510,6 @@ void ALobbyPlayerController::ClearDelegates()
 	Sessions->ClearOnCreateSessionCompleteDelegate_Handle(CreateHandle);
 	Sessions->ClearOnFindSessionsCompleteDelegate_Handle(FindHandle);
 	Sessions->ClearOnJoinSessionCompleteDelegate_Handle(JoinHandle);
+	Sessions->ClearOnDestroySessionCompleteDelegate_Handle(DestroyHandle);
+	Sessions->ClearOnEndSessionCompleteDelegate_Handle(EndRoomSessionHandle);
 }

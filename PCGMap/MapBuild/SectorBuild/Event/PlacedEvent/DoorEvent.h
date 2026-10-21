@@ -5,11 +5,9 @@
 #include "DoorEvent.generated.h"
 
 class UStaticMeshComponent;
-class UNiagaraSystem;
-class USoundBase;
 
-//Execute 시 문 메쉬를 설정된 높이까지 올리고 사운드/이펙트를 재생한다. 다 올라가면 PostEvents 발화
-UCLASS()
+//열리는 연출은 블루프린트가 OnOpen 에서 구현하고, 다 열리면 FinishOpen 을 호출한다
+UCLASS(Blueprintable)
 class ADoorEvent : public AScenePlacedEvent
 {
 	GENERATED_BODY()
@@ -21,27 +19,26 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Door")
 	TObjectPtr<UStaticMeshComponent> FrameMesh;
 
-	//위로 올라가는 문짝 메쉬. FrameMesh의 하위
+	//FrameMesh의 하위
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Door")
 	TObjectPtr<UStaticMeshComponent> DoorMesh;
 
-	//위로 올라갈 높이(cm)
-	UPROPERTY(EditAnywhere, Category = "Door")
-	float RaiseHeight = 300.f;
-
-	//초당 상승 속도(cm/s)
-	UPROPERTY(EditAnywhere, Category = "Door")
-	float RaiseSpeed = 100.f;
-
-	UPROPERTY(EditAnywhere, Category = "Door")
-	TObjectPtr<USoundBase> OpenSound;
-
-	UPROPERTY(EditAnywhere, Category = "Door")
-	TObjectPtr<UNiagaraSystem> OpenEffect;
-
 	virtual void Execute(const UObject* WorldContext = nullptr) override;
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+	//Execute 는 서버에서만 불리므로, 머테리얼/콜리전 변경이 클라이언트에도 보이도록 서버와 모든 클라이언트에서 한 번씩 호출된다
+	UFUNCTION(BlueprintImplementableEvent, Category = "Door")
+	void OnOpen();
+
+	//PostEvents 는 서버에서만 나간다. 클라이언트의 OnOpen 에서 불려도 무시된다
+	UFUNCTION(BlueprintCallable, Category = "Door")
+	void FinishOpen();
 
 private:
-	float RaisedAmount = 0.f;
+	UPROPERTY(ReplicatedUsing = OnRep_Opened)
+	bool bOpened = false;
+
+	UFUNCTION()
+	void OnRep_Opened();
 };

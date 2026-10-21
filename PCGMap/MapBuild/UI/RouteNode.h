@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Styling/SlateBrush.h"
 #include "TeamProject_Fin/PCGMap/MapBuild/MapStruct.h"
 #include "RouteNode.generated.h"
 
@@ -20,6 +21,15 @@ class TEAMPROJECT_FIN_API URouteNode : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	URouteNode(const FObjectInitializer& ObjectInitializer);
+	void RefreshVotes();
+
+	UPROPERTY(BlueprintReadOnly, Category = "Route Vote")
+	int32 VoteCount = 0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Route Vote")
+	FSlateBrush VoteIcon;
+
 	UFUNCTION(BlueprintCallable)
 	void Init(ESectorType Type, FIntPoint Pos);
 
@@ -41,6 +51,17 @@ public:
 	FIntPoint nodePos;
 
 protected:
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+	virtual int32 NativePaint(const FPaintArgs& Args, const FGeometry& AllottedGeometry,
+		const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 LayerId,
+		const FWidgetStyle& InWidgetStyle, bool bParentEnabled) const override;
+
+	UFUNCTION()
+	void OnVotesChanged(FIntPoint Node, int32 Count);
+
+	TWeakObjectPtr<class ABaseGameState> VoteGameState;
+
 	// 타입은 아이콘, 상태는 색과 체크 표시를 정한다
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnTextureSet(ESectorType Type, ERouteNodeState State);

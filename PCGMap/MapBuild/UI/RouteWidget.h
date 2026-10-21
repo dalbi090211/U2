@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "RouteNode.h"
@@ -16,10 +16,13 @@ class TEAMPROJECT_FIN_API URouteWidget : public UUserWidget
 public:
 	// LayoutSeed 는 런 시드. 지터를 전역 randStream 에서 뽑으면 머신마다 노드 위치가 어긋난다.
 	void Init(FVirRoute* OutVirtualRoute, int32 LayoutSeed);
-	void VisibleUI(FIntPoint pos);
+	void VisibleUI(FIntPoint pos, int32 VoteRound, double VoteEndServerTime);
+	int32 GetVoteRound() const { return CurrentVoteRound; }
+	void VoteForNode(FIntPoint Node);
 
-	// 노드를 고른 뒤 닫는다. CloseAnim 이 끝나야 서버로 선택이 넘어간다
-	void CloseUI(FIntPoint SelectedPos);
+	void CloseUI();
+
+	void DismissUI();
 
 	void ActiveWidget(FIntPoint pos);
 
@@ -46,12 +49,15 @@ public:
     
 	UPROPERTY(meta = (BindWidget))
 	UCanvasPanel* NodeContainer;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UTextBlock> CountBlock;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Route Settings|Layout")
 	float PosYOffset = 150.f;
     
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Route Settings|Layout")
-	float levelDistance = 150.f;
+	float levelDistance = 130.f;
     
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Route Settings|Layout")
 	float nodeSpacing = 150.f;
@@ -67,12 +73,22 @@ public:
     
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FVector2D NodeSize = FVector2D(64.f, 64.f);
+
+	// 보스 노드만 이 배율로 키운다. 1이면 다른 노드와 같은 크기
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Route Settings|Layout",
+		meta = (ClampMin = "1.0"))
+	float BossNodeScale = 2.f;
+
+	// 보스만 추가로 더 띄운다. 커진 만큼 올리는 것과 별개로 얹히는 값
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Route Settings|Layout")
+	float BossExtraLift = 60.f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Route Settings|Edge")
 	FVector2D DotSize = FVector2D(8.f, 8.f);
 
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
@@ -80,11 +96,19 @@ protected:
 private:
 	UFUNCTION()
 	void OnCloseAnimFinished();
+	void UpdateVoteTimer();
 
 	void generateWidgets();
 	void generateEdges();
 	void SetupContainerSize();
 	FVector2D GetNodePosition(int32 Y, int32 X) const;
+
+	// 좌표는 (층, 인덱스). NodeMap 키와 같은 순서다
+	bool IsBossNode(FIntPoint Coord) const;
+	float NodeScale(FIntPoint Coord) const;
+
+	// 간선 점이 노드 안으로 파고들지 않도록 물러날 거리
+	float NodeRadius(FIntPoint Coord) const;
 	void SpawnEdgeDots(const FVector2D& Start, const FVector2D& End, FIntPoint StartCoord, FIntPoint EndCoord);
 	void activeConnectedWidgets(FIntPoint pos);
 	
@@ -102,5 +126,7 @@ private:
 
 	// 닫는 중에는 두 번째 선택을 받지 않는다
 	bool bClosing = false;
-	FIntPoint PendingSelect = FIntPoint::ZeroValue;
+	int32 CurrentVoteRound = 0;
+	double VoteEndTime = 0.0;
+	int32 DisplayedSeconds = INDEX_NONE;
 };

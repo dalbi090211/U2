@@ -1,0 +1,286 @@
+
+#pragma once
+
+#include "NativeGameplayTags.h"
+
+namespace GameplayTagSystem
+{
+// 캐릭터
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Player);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Enemy);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Enemy_Melee);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Enemy_Ranged);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Enemy_Elite);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Enemy_Boss);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Character_Boss);
+
+// 상태
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Dead);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Invincible);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Active);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Duration); // UI 전용 마커. 지속시간 GE가 자기 태그와 함께 부여한다
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Overdrive);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Camo_Veil);           // 장막. 스킬이 도는 동안 유지
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Camo_Stealth);        // 은신. 장막 안에서 붙었다 떨어졌다 한다
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Bomber_MineArmed);    // 던진 지뢰가 살아 있음. 지속시간 GE가 부여한다
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Skill_Bomber_MineThrowing); // 투척/기폭 몽타주 재생 중. 이 동안 기본공격을 막는다
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Weapon_Aiming);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Weapon_Reloading);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Weapon_SmartTracking);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Weapon_SmartTrackingVolley);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Movement_Sprinting);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Movement_Dodging);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_Encountered);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_Dormant);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_ActionCommitted);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_MovementDisabled);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_SuperArmor);         // 피해는 받되 HitReact 경직만 무시
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_PossessionReserved); // 빙의 접근 중인 대상을 선점 표시
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_AI_Possessed);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Groggy);      // 그로기(행동 불가) 상태
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Interacting); // 상호작용 연출 중. 이동 입력을 받지 않는다
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Reviving);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Environment_Snow_Level1); // 얕은 눈
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Environment_Snow_Level2); // 깊은 눈
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Environment_Snow_Level3); // 극한 눈
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Debuff_CannotSprint);     // 질주 불가 디버프
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Debuff_Staggered);        // 보스 샤우트 경직. 입력/행동/UI 효과의 공통 기준
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Enemy_Mutated);
+
+// 변형 적 특성. Infinite Trait GE가 부여하며, 패턴/이동은 이 태그만 조회한다.
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Trait_Teleport);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Trait_Split);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Split);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Trait_MaxHealth);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Trait_AttackDamage);
+
+// 행동 (AI가 BehaviorDecision에서 고르는 행동 식별용)
+// 공격 태그를 걸러낼 때 쓰는 부모 태그. 이 아래가 전부 AI 액션이다.
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Melee);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Dash);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_RangedAttack);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_RangedAttack_Phantom_Normal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_RangedAttack_Phantom_Split);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_RangedAttack_Sentinel_Normal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Possession);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Evade);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Emerge);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_SelfDestruct);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_SoulRip);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Elite_Spin);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Elite_RollSpin);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Elite_Beam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Elite_Drones);
+
+// 보스 공격 위력표(DT_MonsterAttackDamage) 조회용 세부 액션 태그
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_ForwardDoubleSwing);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_GroundSlam_Impact);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_GroundSlam_Ring);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_Phase2Transition_Ring);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_ProjectileRing);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_ShatteredMirror_Wall);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_ShatteredMirror_Explosion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_TendrilHorrorEject);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_TendrilSlam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_WhackTwist);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_P3_MirrorFire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_AI_Boss_P3_Missile);
+
+// 새 Enemy Framework의 PatternSet 식별자
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Split);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_ShatteredMirror);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_ForwardDoubleSwing);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_TendrilHorrorEject);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_ProjectileRings);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_GroundSlam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_TendrilSlam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_WhackTwist);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Boss_P3Attack);
+
+// 일반 몬스터 패턴 ID. GA 식별은 기존 Action.AI.* 태그를 그대로 쓴다.
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Melee_Claw);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Melee_RangedNormal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Melee_RangedSplit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Melee_Dash);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Melee_SoulRip);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Melee_Possession);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Range_RangedAttack);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Elite_Spin);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Elite_RollSpin);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Elite_Beam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Pattern_Enemy_Elite_Drones);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Phase_Enemy_Boss_P1);
+
+// 어빌리티
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Skill_Main);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Movement_Dodge);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Movement_Sprint);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Weapon_Fire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Weapon_Reload);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Weapon_Aim);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Weapon_HealingPulse);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Player_ShoutStagger);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_ShatteredMirror);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_RadialExplosion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_ForwardDoubleSwing);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_TendrilHorrorEject);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_ProjectileRings);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_GroundSlam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_TendrilSlam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_WhackTwist);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_P3Attack);
+
+// 일반 몬스터 GA 식별 태그. 보스와 같이 Ability.Enemy.* 로 GA를 찾고,
+// Action.AI.* 는 데미지 표 키로만 남긴다(이관 중에는 기존 StateTree 호환을 위해 함께 둔다).
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Common_Emerge);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Common_Evade);
+// GA_HitReact 는 플레이어와 공유하므로 몬스터 BP에서만 이 태그를 붙인다.
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Common_HitReact);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Common_SelfDestruct);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Melee_Claw);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Melee_RangedNormal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Melee_RangedSplit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Melee_Dash);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Melee_SoulRip);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Melee_Possession);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Range_RangedAttack);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Elite_Spin);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Elite_RollSpin);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Elite_Beam);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Elite_Drones);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Elite_TeleportReposition);
+
+// 이벤트
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Damage);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Combat_DamageDealt);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_HitReact);       // 약한 그로기
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_HitReact_Heavy); // 강한 그로기(넉백)
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Death);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Revive);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Revive_ShowWeapon);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_Fired);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_Hit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_ReloadCommit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_Reloaded);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_ReloadStarted);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_ReloadSound_Start);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_ReloadSound_Insert);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_LeftHandIKRecover);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_SmartTracking_LockStateChanged);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_SmartTracking_TargetLocked);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_SmartTracking_TargetLost);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_SmartTracking_LockIntroFinished);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Weapon_SmartTracking_TargetStackChanged);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Skill_Execute);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Skill_Bomber_MineDetonate); // 지뢰 폭파 GA 트리거
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Skill_Bomber_MineThrow); // 투척 몽타주의 손을 떠나는 프레임. AnimNotify가 보낸다
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_PerceptionChanged);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_EncounterRequested);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_RangedAttack_Phantom);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_RangedAttack_Phantom_Normal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_RangedAttack_Phantom_Split);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_RangedAttack_Sentinel_Normal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Dash_FollowSpline);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Emerge_SelectTurn);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Emerge_CombatRelease);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Evade_Requested);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Possession_Expired);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Interact_Portal); // 포탈 진입 연출 트리거
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_SelfDestruct_Completed);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_SelfDestruct_Detonate);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_SoulRip_Caught); // 잡기 판정 성립
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_SoulRip_Yank);   // 손을 뒤로 뽑는 프레임
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Teleport_Commit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Split_Commit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_RadialExplosion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_AttackAlert);
+
+// 사각 판이 에너지 벽으로 발사되는 프레임
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_ShatteredMirror_Fire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_P3Attack_MirrorFire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_P3Attack_PillarSpawn);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_P3Attack_Shout);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Projectile_Fire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_RingSpawn);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_RingLaunch);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_GroundSlam_Impact);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_GroundSlam_Retract);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_PhaseTransition_Reposition);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_AI_Boss_PhaseTransition_Rise);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_Phase2Transition);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Enemy_Boss_Phase3Transition);
+
+// 데미지
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Source_Player);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Source_Enemy);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Type_Weapon);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Type_Skill);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Type_DoT);         // 도트 데미지 전용 태그
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Type_Groggy);      // 약한 그로기 유발 데미지 태그
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Damage_Type_HeavyGroggy); // 강한 그로기(넉백) 유발 데미지 태그
+
+// 타격
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Hit_FriendlyFire); // 팀킬
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Hit_Weakpoint);    // 약점 명중
+
+// 쿨다운
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_Skill_Main);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_WeaponMod_HealingPulse);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_WeaponMod_DeployTurret);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_WeaponMod_RocketBarrage);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_StaminaRegen);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_AI_Evade);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Cooldown_AI_SoulRip);
+
+// 데이터
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Cooldown);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Damage);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Damage_MaxHealthPercent); // 피격자 최대 체력 비례 피해
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Heal);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_StaminaCost);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Multiplier_Weakpoint);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Multiplier_FriendlyFire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Multiplier_FireInterval);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_Multiplier_ReloadMontageRate);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Data_ArmorPenetration);
+
+// 이펙트
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Environment_Snowstorm);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Environment_SnowDebuff_L1);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Environment_SnowDebuff_L2);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Environment_SnowDebuff_L3);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Buff_AttackUp);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Debuff_Slow);
+
+// 무기
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Weapon_Type_Rifle);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Weapon_Type_GrenadeLauncher);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(Weapon_Type_SniperRifle);
+
+// 게임플레이 큐
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_Fire);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_SmartTrackingTrail);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_HealingPulse);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_RocketBarrage_Launch);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_RocketBarrage_Explosion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_Impact_Surface);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Weapon_Impact_Character);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_AI_Possession);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_AI_SelfDestruct);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_AI_SoulRip);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_AI_DroneDischarge);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_AI_ProjectileSplit);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Skill_Overdrive_Activate);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Skill_Overdrive_Weapon);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Skill_Overdrive_Explosion);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Skill_Overdrive_ChainLightning);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Skill_Camo_Stealth);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Environment_Snow_Level1);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Environment_Snow_Level2);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Environment_Snow_Level3);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Skill_Bomber_MineExplode);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Interact_Portal_Fade);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(CueParameter_PlaySound);
+UE_DECLARE_GAMEPLAY_TAG_EXTERN(CueParameter_ShowDebug);
+}

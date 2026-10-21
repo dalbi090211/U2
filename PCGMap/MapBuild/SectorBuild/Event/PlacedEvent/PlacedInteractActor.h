@@ -38,6 +38,8 @@ public:
 
 	virtual FText GetInteractText() const override { return InteractText; }
 
+	bool IsInteractActive() const { return bActive; }
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	//GA_Interact가 읽어가는 연출 값들
@@ -79,13 +81,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sector")
 	TObjectPtr<UInteractTriggerComponent> Trigger;
 
+	UFUNCTION()
+	virtual void OnRep_Triggered();
+
+	UFUNCTION()
+	virtual void OnRep_Active();
+
 private:
-	UFUNCTION()
-	void OnRep_Triggered();
-
-	UFUNCTION()
-	void OnRep_Active();
-
 	//UI 표시는 각 머신이 하므로 소진/개방 여부를 복제해야 한다
 	UPROPERTY(ReplicatedUsing = OnRep_Triggered)
 	bool bTriggered = false;

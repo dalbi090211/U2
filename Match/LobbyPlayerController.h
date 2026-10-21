@@ -25,6 +25,14 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoomJoinStarted);
 // 참가 실패 시에만 도달한다
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRoomJoined, bool, bSuccess);
 
+// 세션 파괴가 끝난 뒤에 이어서 할 일
+enum class EPendingSessionAction : uint8
+{
+	None,
+	Create,
+	ReturnToLobby,
+};
+
 UCLASS()
 class ALobbyPlayerController : public ABasePlayerController
 {
@@ -116,6 +124,14 @@ private:
 	void OnCreateComplete(FName SessionName, bool bSuccess);
 	void OnFindComplete(bool bSuccess);
 	void OnJoinComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+	void OnDestroyComplete(FName SessionName, bool bSuccess);
+	void RestoreRoomSession();
+	void OnEndRoomSessionComplete(FName SessionName, bool bSuccess);
+	void ReopenRoomSession();
+
+	// 파괴는 비동기다. 끝나기 전에 만들거나 트래블하면 실패한다
+	void DestroyThen(EPendingSessionAction Action);
+	void StartCreateSession();
 
 	// GameState는 클라에서 늦게 도착한다. 도착하면 인원 변경 신호에 붙는다.
 	void BindRoomUpdates();
@@ -127,6 +143,11 @@ private:
 	FDelegateHandle CreateHandle;
 	FDelegateHandle FindHandle;
 	FDelegateHandle JoinHandle;
+	FDelegateHandle DestroyHandle;
+	FDelegateHandle EndRoomSessionHandle;
+	bool bRestoringRoomSession = false;
+	bool bStartingGame = false;
 
 	FString PendingRoomName;
+	EPendingSessionAction PendingAction = EPendingSessionAction::None;
 };

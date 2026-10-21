@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "Engine/DataAsset.h"
+
 #include "SectorEvent.generated.h"
 
 UINTERFACE(MinimalAPI)
@@ -38,7 +39,7 @@ struct FTimedEventGroup
 	UPROPERTY(EditInstanceOnly, Category = "Sector",
 		meta = (
 			AllowedClasses = 
-			"/Script/TeamProject_Fin.ScenePlacedEvent,/Script/TeamProject_Fin.ChaosCacheTriggerEvent"
+			"/Script/TeamProject_Fin.ScenePlacedEvent,/Script/TeamProject_Fin.ChaosCacheTriggerEvent,/Script/TeamProject_Fin.SpawnPoint"
 		)
 	)
 	TArray<TScriptInterface<ISectorEvent>> PlacedEvents;	//본인을 지정 시 재귀가 발생할 수 있음

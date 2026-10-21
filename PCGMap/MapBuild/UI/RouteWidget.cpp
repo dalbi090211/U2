@@ -1,7 +1,10 @@
-#include "RouteWidget.h"
+﻿#include "RouteWidget.h"
 #include "Animation/WidgetAnimation.h"
 #include "Components/CanvasPanelSlot.h"
 #include "GameCore/BasePlayerController.h"
+#include "GameCore/BaseGameState.h"
+#include "Blueprint/WidgetTree.h"
+#include "Components/TextBlock.h"
 #include "Math/UnrealMathUtility.h"
 
 void URouteWidget::Init(FVirRoute* OutVirtualRoute, int32 LayoutSeed)
@@ -11,7 +14,7 @@ void URouteWidget::Init(FVirRoute* OutVirtualRoute, int32 LayoutSeed)
 
     if (routePointer)
     {
-       TotalHeight = (routePointer->MaxY - 1) * levelDistance;
+       TotalHeight = (routePointer->Levels.Num() - 1) * levelDistance;
        TotalWidth = (routePointer->MaxX - 1) * nodeSpacing;
        
         SetupContainerSize();
@@ -36,7 +39,7 @@ void URouteWidget::SetPosition(int32 Y)
    }
 
    float MaxScroll = FMath::Max(0.f, TotalHeight);
-   float testY = FMath::Clamp(-(routePointer->MaxY - (float)Y) * levelDistance - PosYOffset, -MaxScroll, 0.f);
+   float testY = FMath::Clamp(-(routePointer->Levels.Num() - (float)Y) * levelDistance - PosYOffset, -MaxScroll, 0.f);
 
    FVector2D CurrentPos = ContainerSlot->GetPosition();
    ContainerSlot->SetPosition(FVector2D(CurrentPos.X, testY));
@@ -45,6 +48,16 @@ void URouteWidget::SetPosition(int32 Y)
 void URouteWidget::ActiveWidget(FIntPoint pos)
 {
    UE_LOG(LogTemp, Warning, TEXT("ActiveWidget : %d, %d"), pos.Y, pos.X);
+
+   // 위젯은 재사용된다. 지난번에 켠 것을 끄지 않으면 그때 고를 수 있던 노드가 계속 눌린다
+   for (const TPair<FIntPoint, URouteNode*>& Entry : NodeMap)
+   {
+      if (Entry.Value)
+      {
+         Entry.Value->SetState(ERouteNodeState::Locked);
+      }
+   }
+
    if (pos.Y < 0) //초기 실행의 경우
    {
       for (int i = 0; i < routePointer->MaxX; i++)
@@ -114,9 +127,9 @@ void URouteWidget::generateWidgets()
        return;
     }
     
-    NodePositions.SetNum(routePointer->MaxY);
+    NodePositions.SetNum(routePointer->Levels.Num());
     
-    for (int i = 0; i < routePointer->MaxY; i++)
+    for (int i = 0; i < routePointer->Levels.Num(); i++)
     {
        NodePositions[i].SetNum(routePointer->MaxX);
        
@@ -141,7 +154,20 @@ void URouteWidget::generateWidgets()
              LayoutRand.FRandRange(-nodeNoiseRange, nodeNoiseRange),
              LayoutRand.FRandRange(-nodeNoiseRange, nodeNoiseRange)
           );
-          FVector2D FinalPos = BasePos + Jitter;
+          // 보스는 흔들면 안 된다. 굴림은 소비해야 머신마다 나머지 노드 자리가 같다
+          const bool bBoss = IsBossNode(FIntPoint(i, j));
+          FVector2D FinalPos = bBoss ? BasePos : BasePos + Jitter;
+
+          // 가운데 정렬이라 키우면 아래로도 자란다. 아랫변을 원래 자리에 두려고 그만큼 올린다
+          const float Scale = NodeScale(FIntPoint(i, j));
+          FinalPos.Y -= NodeSize.Y * 0.5f * (Scale - 1.f);
+
+          if (bBoss)
+          {
+             // 칸이 짝수면 GetNodePosition 이 반 칸 어긋난다. 보스는 캔버스 한가운데로 박는다
+             FinalPos.X = 0.f;
+             FinalPos.Y -= BossExtraLift;
+          }
           NodePositions[i][j] = FinalPos;
           
           // CanvasPanel에 추가 및 슬롯 설정
@@ -151,7 +177,7 @@ void URouteWidget::generateWidgets()
              NodeSlot->SetAnchors(FAnchors(0.5f, 0.5f)); // 중앙 기준
              NodeSlot->SetAlignment(FVector2D(0.5f, 0.5f)); // 위젯 피벗 중앙
              NodeSlot->SetPosition(FinalPos);
-             NodeSlot->SetSize(NodeSize);
+             NodeSlot->SetSize(NodeSize * Scale);
              NodeSlot->SetZOrder(1); // 점(EdgeDot)보다 위에 렌더링되도록 Z-Order 설정
           }
        }
@@ -165,7 +191,7 @@ void URouteWidget::generateEdges()
        return;
     }
     
-    for (int i = 0; i < routePointer->MaxY; i++)
+    for (int i = 0; i < routePointer->Levels.Num(); i++)
     {
        for (int j = 0; j < routePointer->MaxX; j++)
        {
@@ -211,6 +237,19 @@ void URouteWidget::SpawnEdgeDots(const FVector2D& Start, const FVector2D& End, F
     }
     
     FVector2D Direction = Delta / Length;
+    // 노드 안쪽에는 점을 찍지 않는다. 보스는 커진 만큼 더 물러난다
+    const FVector2D From = Start + Direction * NodeRadius(StartCoord);
+    const FVector2D To = End - Direction * NodeRadius(EndCoord);
+
+    Delta = To - From;
+    Length = Delta.Size();
+
+    if (Length <= KINDA_SMALL_NUMBER)
+    {
+       return; // 두 노드가 맞붙어 있어 점 찍을 자리가 없다
+    }
+
+    Direction = Delta / Length;
     FVector2D Perpendicular(-Direction.Y, Direction.X);
     
     // 점 이미지가 길쭉한 선 모양일 경우를 대비해, 목적지를 향하는 각도(회전값)를 구합니다.
@@ -223,10 +262,10 @@ void URouteWidget::SpawnEdgeDots(const FVector2D& Start, const FVector2D& End, F
    
     // 양 끝점(p=0, p=PointCount)은 노드에 겹치므로 제외하거나, 필요에 따라 범위를 조정하세요.
     // 여기서는 자연스러운 연결을 위해 p=1 부터 PointCount-1 까지만 그립니다.
-    for (int32 p = 1; p < PointCount; p++)
+    for (int32 p = 0; p <= PointCount; p++)
     {
        float t = (float)p / (float)PointCount;
-       FVector2D BasePoint = FMath::Lerp(Start, End, t);
+       FVector2D BasePoint = FMath::Lerp(From, To, t);
        
        // 노이즈(Jitter) 적용 - 양 끝 노드에 가까울수록 노이즈 감소
        float fadeWeight = FMath::Sin(t * PI); 
@@ -254,10 +293,23 @@ void URouteWidget::SpawnEdgeDots(const FVector2D& Start, const FVector2D& End, F
 }
 
 //인게임 ui 관련 ===============================================
-void URouteWidget::VisibleUI(FIntPoint pos)
+void URouteWidget::VisibleUI(FIntPoint pos, int32 VoteRound, double VoteEndServerTime)
 {
+   StopAllAnimations();
+   bClosing = false;
+   bIsDragging = false;
+   CurrentVoteRound = VoteRound;
+   VoteEndTime = VoteEndServerTime;
+   DisplayedSeconds = INDEX_NONE;
+   UpdateVoteTimer();
+   for (const auto& Entry : NodeMap)
+   {
+      Entry.Value->RefreshVotes();
+   }
+   // CloseAnim이 루트의 불투명도를 내린 채 끝나도 다음 방에서 다시 보여야 한다.
+   WidgetTree->RootWidget->SetRenderOpacity(1.f);
    SetPosition(pos.Y);
-   SetVisibility(ESlateVisibility::Visible);
+   SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 
    if (OpenAnim)
    {
@@ -265,14 +317,25 @@ void URouteWidget::VisibleUI(FIntPoint pos)
    }
 }
 
-void URouteWidget::CloseUI(FIntPoint SelectedPos)
+void URouteWidget::VoteForNode(FIntPoint Node)
 {
-   if (bClosing)
+   if (!IsVisible() || bClosing)
+   {
+      return;
+   }
+   ABasePlayerController* PC = Cast<ABasePlayerController>(GetOwningPlayer());
+   check(PC);
+   PC->Server_VoteRouteNode(CurrentVoteRound, Node);
+}
+
+void URouteWidget::CloseUI()
+{
+   if (bClosing || !IsVisible())
    {
       return;
    }
    bClosing = true;
-   PendingSelect = SelectedPos;
+   StopAllAnimations();
 
    // 애니메이션이 없으면 기다릴 것도 없다
    if (!CloseAnim)
@@ -284,15 +347,35 @@ void URouteWidget::CloseUI(FIntPoint SelectedPos)
    PlayAnimation(CloseAnim);
 }
 
+void URouteWidget::DismissUI()
+{
+   StopAllAnimations();
+   bClosing = false;
+   SetVisibility(ESlateVisibility::Hidden);
+}
+
 void URouteWidget::OnCloseAnimFinished()
 {
    SetVisibility(ESlateVisibility::Hidden);
    bClosing = false;
 
-   // 여기서 보내야 닫히는 연출이 끝난 뒤에 트래블이 시작된다
-   if (ABasePlayerController* PC = Cast<ABasePlayerController>(GetOwningPlayer()))
+}
+
+void URouteWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+   Super::NativeTick(MyGeometry, InDeltaTime);
+   UpdateVoteTimer();
+}
+
+void URouteWidget::UpdateVoteTimer()
+{
+   const ABaseGameState* GS = GetWorld()->GetGameState<ABaseGameState>();
+   check(GS);
+   const int32 Seconds = FMath::Max(0, FMath::CeilToInt(VoteEndTime - GS->GetServerWorldTimeSeconds()));
+   if (Seconds != DisplayedSeconds)
    {
-      PC->Server_SelectNode(PendingSelect);
+      DisplayedSeconds = Seconds;
+      CountBlock->SetText(FText::AsNumber(Seconds));
    }
 }
 
@@ -309,6 +392,24 @@ void URouteWidget::NativeConstruct()
    }
 
    SetVisibility(ESlateVisibility::Hidden);
+}
+
+bool URouteWidget::IsBossNode(FIntPoint Coord) const
+{
+   return routePointer
+      && routePointer->Levels.IsValidIndex(Coord.X)
+      && routePointer->Levels[Coord.X].Sectors.IsValidIndex(Coord.Y)
+      && routePointer->Levels[Coord.X].Sectors[Coord.Y].Type == ESectorType::Boss;
+}
+
+float URouteWidget::NodeScale(FIntPoint Coord) const
+{
+   return IsBossNode(Coord) ? BossNodeScale : 1.f;
+}
+
+float URouteWidget::NodeRadius(FIntPoint Coord) const
+{
+   return NodeSize.Y * 0.5f * NodeScale(Coord);
 }
 
 FVector2D URouteWidget::GetNodePosition(int32 Y, int32 X) const

@@ -1,4 +1,4 @@
-#include "EventManager.h"
+﻿#include "EventManager.h"
 
 #include "TimerManager.h"
 #include "Engine/World.h"
@@ -98,6 +98,11 @@ void UEventManager::HideScreenText(EScreenIntensity Intensity)
 	}
 	ActiveTexts.Remove(Intensity);
 	OnScreenTextHideRequested.Broadcast(Intensity);
+}
+
+void UEventManager::SetCinematicSkipVotes(int32 Voted, int32 Total)
+{
+	OnCinematicSkipVotesChanged.Broadcast(Voted, Total);
 }
 
 void UEventManager::SetInteractPrompt(const FText& Prompt)

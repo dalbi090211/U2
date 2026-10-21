@@ -1,5 +1,7 @@
 ﻿#include "BaseWidgetLayer.h"
 
+#include "GameCore/BasePlayerController.h"
+
 void UBaseWidgetLayer::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -11,6 +13,10 @@ void UBaseWidgetLayer::NativeConstruct()
 
 UDefaultWidgetLayer* UBaseWidgetLayer::ShowWidget(ELayerName Name)
 {
+	if (bPresentationHidden)
+	{
+		return nullptr;
+	}
 	TObjectPtr<UDefaultWidgetLayer>* Found = Widgets.Find(Name);
 	UDefaultWidgetLayer* Widget = Found ? Found->Get() : nullptr;
 
@@ -80,16 +86,70 @@ void UBaseWidgetLayer::ApplyInputMode()
 		return;
 	}
 
-	if (Stack.Num() == 0 && bGameInputWhenNoWindow)
+	// 루트맵은 스택 밖에서 뜬다. 스택이 비었다고 게임 입력으로 되돌리면 클릭이 죽는다.
+	ABasePlayerController* BasePC = Cast<ABasePlayerController>(PC);
+	const bool bOutsideUI = BasePC && BasePC->HasUIOutsideLayers();
+
+	if (Stack.Num() == 0 && !bOutsideUI)
 	{
-		PC->SetInputMode(FInputModeGameOnly());
-		PC->bShowMouseCursor = false;
+		if (bGameInputWhenNoWindow)
+		{
+			PC->SetInputMode(FInputModeGameOnly());
+			PC->bShowMouseCursor = false;
+			return;
+		}
+
+		FInputModeGameAndUI Mode;
+		Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		Mode.SetHideCursorDuringCapture(false);
+		PC->SetInputMode(Mode);
+		PC->bShowMouseCursor = true;
 		return;
 	}
 
-	FInputModeGameAndUI Mode;
+	// 창이 떠 있는 동안은 게임 입력을 끊는다. ESC는 맨 위 위젯이 직접 받는다.
+	FInputModeUIOnly Mode;
 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	Mode.SetHideCursorDuringCapture(false);
+	if (Stack.Num() > 0)
+	{
+		Mode.SetWidgetToFocus(Stack.Last()->TakeWidget());
+	}
 	PC->SetInputMode(Mode);
 	PC->bShowMouseCursor = true;
+
+	// 창을 열기 전에 누르고 있던 키가 눌린 채로 남아 캐릭터가 계속 움직이는 걸 막는다
+	PC->FlushPressedKeys();
+}
+
+void UBaseWidgetLayer::SetPresentationHidden(bool bHidden)
+{
+	if (bPresentationHidden == bHidden)
+	{
+		return;
+	}
+	bPresentationHidden = bHidden;
+	if (bHidden)
+	{
+		SavedPresentationVisibility.Add(this, GetVisibility());
+		SetVisibility(ESlateVisibility::Collapsed);
+		for (const auto& Pair : Widgets)
+		{
+			if (UDefaultWidgetLayer* Widget = Pair.Value.Get())
+			{
+				SavedPresentationVisibility.Add(Widget, Widget->GetVisibility());
+				Widget->SetVisibility(ESlateVisibility::Collapsed);
+			}
+		}
+	}
+	else
+	{
+		for (const auto& Pair : SavedPresentationVisibility)
+		{
+			if (UUserWidget* Widget = Pair.Key.Get())
+			{
+				Widget->SetVisibility(Pair.Value);
+			}
+		}
+		SavedPresentationVisibility.Reset();
+	}
 }

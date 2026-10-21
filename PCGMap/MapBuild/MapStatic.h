@@ -8,15 +8,9 @@
 
 // 나가는 페이드 시간. 서버는 이만큼 기다렸다 넘어가고, 클라는 이만큼 어두워진다
 inline constexpr float LevelFadeOutTime = 0.6f;
+inline constexpr float Tol = 10.f;
+inline FRandomStream randStream;
 
-/*
- * 레벨 이름 하나로 심리스 트래블. 서버 권한에서만 실제로 넘어간다.
- *
- * 레벨 전환은 전부 이 함수를 거친다. 화면을 먼저 어둡게 깔고, 다 내려간 뒤에 넘어간다.
- * ServerTravel 을 직접 부르면 페이드가 보이기 전에 월드가 갈린다.
- *
- * APlayerController 에 SeamlessTravelTo 멤버가 있어서 이름을 겹치면 안 된다.
- */
 inline bool StartLevelTransition(const UObject* WorldContextObject, FName LevelName)
 {
 	UWorld* World = WorldContextObject ? WorldContextObject->GetWorld() : nullptr;
@@ -64,11 +58,18 @@ inline bool StartLevelTransition(const UObject* WorldContextObject, FName LevelN
 	return true;
 }
 
-//영역 충돌 체크
+/*
+ * 영역 충돌 체크. Tol 이하로 파고든 것은 겹침으로 안 본다 — 이음매에서 맞닿는 면 때문에.
+ * ExpandBy(-Tol) 로 양쪽을 줄이면 Tol*2 보다 얇은 볼륨이 뒤집혀 판정이 통째로 꺼진다
+ */
 static bool DoAABB(const FBox& AA, const FBox& BB)
 {
-	constexpr float Tol = 10.f;
-	return AA.ExpandBy(-Tol).Intersect(BB.ExpandBy(-Tol));
+	if (!AA.Intersect(BB))
+	{
+		return false;
+	}
+
+	return AA.Overlap(BB).GetSize().GetMin() > Tol;
 }
 
 // 파일 로컬 헬퍼
@@ -94,5 +95,3 @@ static void LoadClassArray(const TArray<TSoftClassPtr<T>>& In,
 		}
 	}
 }
-
-inline FRandomStream randStream;

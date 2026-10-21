@@ -21,3 +21,22 @@ void UDefaultWidgetLayer::CloseWidget()
 		PC->CloseWidget();
 	}
 }
+
+void UDefaultWidgetLayer::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+
+	// 포커스를 받아야 ESC 키가 들어온다
+	SetIsFocusable(true);
+}
+
+FReply UDefaultWidgetLayer::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+{
+	if (InKeyEvent.GetKey() == EKeys::Escape)
+	{
+		CloseWidget();
+		return FReply::Handled();
+	}
+
+	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
+}

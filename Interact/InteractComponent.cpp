@@ -4,6 +4,7 @@
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
 #include "GameCore/Interface/Interactable.h"
+#include "GameCore/Weapon/World/GunObject.h"
 #include "PCGMap/MapBuild/SectorBuild/Event/EventManager.h"
 
 UInteractComponent::UInteractComponent()
@@ -61,6 +62,8 @@ void UInteractComponent::RefreshPrompt()
 AActor* UInteractComponent::GetNearest() const
 {
 	const FVector Origin = GetOwner()->GetActorLocation();
+	const APawn* Pawn = Cast<APawn>(GetOwner());
+	const APlayerController* PC = Pawn ? Cast<APlayerController>(Pawn->GetController()) : nullptr;
 
 	AActor* Best = nullptr;
 	float BestDistSq = TNumericLimits<float>::Max();
@@ -72,6 +75,14 @@ AActor* UInteractComponent::GetNearest() const
 			continue; // 범위 안에서 파괴된 액터
 		}
 
+		// Keep overlap tracking intact while ownership replicates, but never select another player's loot.
+		if (Candidate->bOnlyRelevantToOwner
+			&& !Candidate->IsOwnedBy(GetOwner())
+			&& (!PC || !Candidate->IsOwnedBy(PC)))
+		{
+			continue;
+		}
+
 		const float DistSq = FVector::DistSquared(Origin, Candidate->GetActorLocation());
 		if (DistSq < BestDistSq)
 		{
@@ -80,7 +91,46 @@ AActor* UInteractComponent::GetNearest() const
 		}
 	}
 
-	return Best;
+	// Preserve distance selection for other interactions. Only rank gun pickups by aim.
+	if (!Cast<AGunObject>(Best) || !PC)
+	{
+		return Best;
+	}
+
+	FVector ViewLocation;
+	FRotator ViewRotation;
+	PC->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	const FVector ViewDirection = ViewRotation.Vector();
+	AActor* BestGun = nullptr;
+	float BestAimDot = 0.0f;
+	float BestGunDistSq = TNumericLimits<float>::Max();
+	for (AActor* Candidate : Candidates)
+	{
+		if (!IsValid(Candidate) || !Cast<AGunObject>(Candidate))
+		{
+			continue;
+		}
+		if (Candidate->bOnlyRelevantToOwner
+			&& !Candidate->IsOwnedBy(GetOwner())
+			&& !Candidate->IsOwnedBy(PC))
+		{
+			continue;
+		}
+
+		const float AimDot = FVector::DotProduct(
+			ViewDirection, (Candidate->GetActorLocation() - ViewLocation).GetSafeNormal());
+		const float DistSq = FVector::DistSquared(Origin, Candidate->GetActorLocation());
+		// Behind-camera pickups are excluded; equal aim angles use the existing distance rule.
+		if (AimDot > 0.0f && (AimDot > BestAimDot
+			|| (AimDot == BestAimDot && DistSq < BestGunDistSq)))
+		{
+			BestAimDot = AimDot;
+			BestGunDistSq = DistSq;
+			BestGun = Candidate;
+		}
+	}
+
+	return BestGun;
 }
 
 void UInteractComponent::Invoke()

@@ -32,10 +32,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Layer")
 	void CloseTop();
 
+	// 결과 UI는 별도 뷰포트 위젯이다. 기존 HUD와 풀의 레이어를 함께 숨긴다.
+	void SetPresentationHidden(bool bHidden);
+
 protected:
 	virtual void NativeConstruct() override;
 
 private:
+	TMap<TWeakObjectPtr<UUserWidget>, ESlateVisibility> SavedPresentationVisibility;
+	bool bPresentationHidden = false;
+
 	// 재활용 풀. Hide 된 위젯도 포함
 	UPROPERTY()
 	TMap<ELayerName, TObjectPtr<UDefaultWidgetLayer>> Widgets;
